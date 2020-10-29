@@ -46,8 +46,5 @@ except KeyboardInterrupt:
 except:
     print("Something else went wrong")
 finally:
-    print("Exiting RELAY control (try error)")
+    print("Exiting RELAY control")
     GPIO.cleanup()
-#
-#print("Exiting RELAY control")
-#GPIO.cleanup()   
