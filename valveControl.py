@@ -21,7 +21,7 @@ try:
     
         time.sleep(10)
         
-        with open("./valveCmd.csv") as csvFile:
+        with open("../RPi-HeatingSys-Data/valveCmd.csv") as csvFile:
             csv_reader = csv.reader(csvFile)
             csv_headings = next(csv_reader) #read 1st csv line
             cmd_line = next(csv_reader) #read second csv line (cmd)
@@ -30,18 +30,24 @@ try:
             #Get RelayPinNo
             pinNo=RelayPinNo[iP]
             
-            if cmd_line[iP+1]=='1':
+            if cmd_line[iP+2]=='1':
                 GPIO.output(pinNo,GPIO.LOW)
-            elif cmd_line[iP+1]=='0':
+            elif cmd_line[iP+2]=='0':
                 GPIO.output(pinNo,GPIO.HIGH)
             else:
                 GPIO.output(pinNo,GPIO.HIGH)
                 print("Wrong input, forced pin %d off" % (iP+1))
-            
+         
+        if cmd_line[1]=='1': # exit loop
+            break
+             
 except KeyboardInterrupt:
     print("Manual Quit: OK")
 except:
     print("Something else went wrong")
 finally:
     print("Exiting RELAY control")
-    GPIO.cleanup()   
+    GPIO.cleanup()
+
+print("Exiting RELAY control")
+GPIO.cleanup()   
