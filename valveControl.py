@@ -2,6 +2,7 @@
 
 import RPi.GPIO as GPIO
 import csv
+import time
 
 # RELAY SETUP
 GPIO.setmode(GPIO.BOARD)
@@ -15,23 +16,32 @@ for pinNo in RelayPinNo:
     GPIO.output(pinNo,GPIO.HIGH)
 
 # READ CMD FROM CSV EVERY ~10 SECONDS
-while True:
-
-    time.sleep(10)
+try:
+    while True:
     
-    with open("./valveCmd.csv") as csvFile:
-        csv_reader = csv.reader(csvFile)
-        csv_headings = next(csv_reader) #read 1st csv line
-        cmd_line = next(csv_reader) #read second csv line (cmd)
-    
-    for iP in range(4):
-        #Get RelayPinNo
-        pinNo=RelayPinNo[iP]
+        time.sleep(10)
         
-        if cmd_line[iP+1]=='1':
-            GPIO.output(pinNo,GPIO.LOW)
-        elif cmd_line[iP+1]=='0':
-            GPIO.output(pinNo,GPIO.HIGH)
-        else:
-            GPIO.output(pinNo,GPIO.HIGH)
-            print("Wrong input, forced pin %d off" % (iP+1))  
+        with open("./valveCmd.csv") as csvFile:
+            csv_reader = csv.reader(csvFile)
+            csv_headings = next(csv_reader) #read 1st csv line
+            cmd_line = next(csv_reader) #read second csv line (cmd)
+        
+        for iP in range(4):
+            #Get RelayPinNo
+            pinNo=RelayPinNo[iP]
+            
+            if cmd_line[iP+1]=='1':
+                GPIO.output(pinNo,GPIO.LOW)
+            elif cmd_line[iP+1]=='0':
+                GPIO.output(pinNo,GPIO.HIGH)
+            else:
+                GPIO.output(pinNo,GPIO.HIGH)
+                print("Wrong input, forced pin %d off" % (iP+1))
+            
+except KeyboardInterrupt:
+    print("Manual Quit: OK")
+except:
+    print("Something else went wrong")
+finally:
+    print("Exiting RELAY control")
+    GPIO.cleanup()   
