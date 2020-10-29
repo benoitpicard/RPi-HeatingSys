@@ -20,7 +20,7 @@ try:
     
         time.sleep(10)
         
-        with open(".\valveCmd.csv", delimiter=',') as csvFile:
+        with open("./valveCmd.csv") as csvFile:
             csv_reader = csv.reader(csvFile)
             csv_headings = next(csv_reader) #read 1st csv line
             cmd_line = next(csv_reader) #read second csv line (cmd)
@@ -28,14 +28,14 @@ try:
         for iP in range(4):
             #Get RelayPinNo
             pinNo=RelayPinNo[iP]
-
-            if cmd_line[iP+1]==0:
+            
+            if cmd_line[iP+1]=='1':
                 GPIO.output(pinNo,GPIO.LOW)
-            elif cmd_line[iP+1]==0:
+            elif cmd_line[iP+1]=='0':
                 GPIO.output(pinNo,GPIO.HIGH)
             else:
                 GPIO.output(pinNo,GPIO.HIGH)
-                print("Wrong input, forced pin %d off",(iP+1))
+                print("Wrong input, forced pin %d off" % (iP+1))
             
 except KeyboardInterrupt:
     print("Manual Quit: OK")
