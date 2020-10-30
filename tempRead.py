@@ -59,8 +59,8 @@ while True:
     for iS in range(TS2_Count):
         for attempt in range(10):
             try:
-                TS2_Data[iS*2]=DHT_SENS[].temperature
-                TS2_Data[iS*2+1]=DHT_SENS[].humidity
+                TS2_Data[iS*2]=DHT_SENS[iS].temperature
+                TS2_Data[iS*2+1]=DHT_SENS[iS].humidity
             except:
                 continue
     
