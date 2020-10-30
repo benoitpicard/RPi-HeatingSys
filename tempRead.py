@@ -36,10 +36,9 @@ DHT_SENS=[]
 DHT_SENS.append(adafruit_dht.DHT11(board.D12))
 DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
-
 # INFINITE LOOP 
-while True
-    
+while True:
+
     # Restart every 5s:
     time.sleep(5)
     # Init
