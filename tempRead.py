@@ -49,17 +49,20 @@ while True:
     
     # DS18B20 SENSOR READ
     for iS in range(TS1_Count):
-        try:
-            TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
-    
+        for attempt in range(2):
+            try:
+                TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
+            except:
+                continue
+            
     # DHT SENSOR READ
     for iS in range(TS2_Count):
         for attempt in range(10):
             try:
                 TS2_Data[iS*2]=DHT_SENS[].temperature
                 TS2_Data[iS*2+1]=DHT_SENS[].humidity
-            else:
-                break
+            except:
+                continue
     
     # GROUP DATA WITH DATE
     TS_NAME=['Date']+TS1_Name+TS2_Name
