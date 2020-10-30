@@ -67,7 +67,7 @@ while True:
     # GROUP DATA WITH DATE
     TS_NAME=['Date']+TS1_Name+TS2_Name
     TS_Unit=['']+TS1_Unit+TS2_Unit
-    TS_Data=[pd.to_datetime('today')]+TS1_Data+TS2_Data
+    TS_Data=np.concatenate(([pd.to_datetime('today')],TS1_Data,TS2_Data))
     
     #Write to CSV
     print(TS_Data)
