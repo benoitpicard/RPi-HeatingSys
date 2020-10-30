@@ -29,7 +29,7 @@ for iS in range(TS1_Count):
     DS18B20_SENS.append(W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, TS1_ID[iS]))
 
 # DHT SETUP
-TS2_Name['TA_UD','HA_UD','TA_MD','HA_MD']
+TS2_Name=['TA_UD','HA_UD','TA_MD','HA_MD']
 TS2_Unit=['C','%','C','%']
 TS2_Count=len(TS2_Name)
 DHT_SENS=[]
