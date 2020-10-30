@@ -59,7 +59,7 @@ while True:
                 TS2_Data[iS*2]=DHT_SENS[].temperature
                 TS2_Data[iS*2+1]=DHT_SENS[].humidity
             else:
-              break
+                break
     
     # GROUP DATA WITH DATE
     TS_NAME=['Date']+TS1_Name+TS2_Name
