@@ -41,13 +41,14 @@ DHT_SENS=[]
 DHT_SENS.append(adafruit_dht.DHT11(board.D12))
 DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
-print('Setup completed, running temperature measurement')
+print('['+pd.to_datetime('today')+'] tempRead.py: Setup completed, running temperature measurement')
 # INFINITE LOOP 
 while True:
 
     # Restart every 5s:
     time.sleep(5)
-    # Init
+    
+    # Init to NaN
     TS1_Data=np.empty(TS1_Count)
     TS1_Data[:]=np.nan
     TS2_Data=np.empty(TS2_Count)
@@ -104,5 +105,5 @@ while True:
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
         
-    print('Temp data recorded and saved to csv (' + file_tempSensor + ')')
+    print('['+ pd.to_datetime('today')+'] tempRead.py: Temp data saved to csv (' + file_tempSensor + ')')
     
