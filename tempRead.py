@@ -86,7 +86,7 @@ while True:
     print(TS_Data)
     if reset_tempData:  
         # Create Pandas DataFrame with header
-        temp_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
+        temp_df=pd.DataFrame(TS_Data,columns=TS_ColName)
         temp_df.to_csv(file_tempSensor,mode='w',header=True)
         
         reset_tempData=False
@@ -95,7 +95,7 @@ while True:
 
 
         read_df=pd.read_csv(file_tempSensor)
-        newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
+        newLine_df=pd.DataFrame(TS_Data,columns=TS_ColName)
         temp_df=read_df.append(newLine_df,sort=False)
         
         # remove 1st line if too long
