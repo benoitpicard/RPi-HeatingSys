@@ -37,8 +37,8 @@ for iS in range(TS1_Count):
 # --- DHT SETUP --- 
 #   issue with PulseIn process being stuck after closing first iteration: 'kill' #https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/27
 for proc in psutil.process_iter():
-...     if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
-...             proc.kill()
+    if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
+        proc.kill()
 #   setup name
 TS2_Name=['TA_UD','HA_UD','TA_MD','HA_MD']
 TS2_Unit=['C','%','C','%']
