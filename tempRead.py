@@ -82,7 +82,7 @@ while True:
     #   if new start, overwrite file
     #   else append last and check linecount, if too long, drop 1st line
     
-    # print(TS_Data)
+    print(TS_Data)
     if reset_tempData:  
         # Create Pandas DataFrame with header
         temp_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
@@ -103,4 +103,6 @@ while True:
             temp_df=temp_df.drop(temp_df.index[[0]])
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True)
+        
+    print('Data saved to csv')
     
