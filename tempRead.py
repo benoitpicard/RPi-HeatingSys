@@ -87,7 +87,7 @@ while True:
     if reset_tempData:  
         # Create Pandas DataFrame with header
         temp_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
-        temp_df.to_csv(file_tempSensor,mode='w',header=True,index_col = False)
+        temp_df.to_csv(file_tempSensor,mode='w',header=True,index=False)
         
         reset_tempData=False
     else:
@@ -103,7 +103,7 @@ while True:
         if dfCount>file_maxLines:
             temp_df=temp_df.drop(temp_df.index[[0]])
             
-        temp_df.to_csv(file_tempSensor,mode='w',header=True,index_col = False)
+        temp_df.to_csv(file_tempSensor,mode='w',header=True,index=False)
         
     print('Data saved to csv')
     
