@@ -96,7 +96,7 @@ while True:
 
         read_df=pd.read_csv(file_tempSensor)
         newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
-        temp_df=read_df.append(df_newLine)
+        temp_df=read_df.append(newLine_df)
         
         # remove 1st line if too long
         dfCount=len(df3.index)+1
