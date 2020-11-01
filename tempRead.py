@@ -12,7 +12,7 @@ import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on
 
 # FILE NAME
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
-file_maxLines=10
+file_maxLines=10000
 reset_tempData=True
 
 # SENSOR LIST (DS18B20)
@@ -83,7 +83,6 @@ while True:
     #   if new start, overwrite file
     #   else append last and check linecount, if too long, drop 1st line
     
-    print(TS_Data)
     if reset_tempData:  
         # Create Pandas DataFrame with header
         temp_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
@@ -100,10 +99,10 @@ while True:
         
         # remove 1st line if too long
         dfCount=len(temp_df.index)+1
-        if dfCount>file_maxLines:
+        if dfCount+1>file_maxLines:
             temp_df=temp_df.drop(temp_df.index[[0]])
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
         
-    print('Data saved to csv')
+    print('Temp data recorded and saved to csv (' + file_tempSensor + '))
     
