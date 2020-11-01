@@ -77,7 +77,7 @@ while True:
     for iN in range(len(TS_Name)):
         TS_ColName.append(TS_Name[iN]+' ('+ TS_Unit[iN]+')')
         
-    TS_Data=np.concatenate(([pd.to_datetime('today')],TS1_Data,TS2_Data))
+    TS_Data=[np.concatenate(([pd.to_datetime('today')],TS1_Data,TS2_Data))]
     
     #Write to CSV
     #   if new start, overwrite file
