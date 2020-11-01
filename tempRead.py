@@ -10,6 +10,11 @@ from w1thermsensor import W1ThermSensor
 import board
 import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
 
+# FILE NAME
+file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
+file_maxLines=10
+reset_tempData=True
+
 # SENSOR LIST (DS18B20)
 # RPi pin no default in used (GPIO4) for 1-wire protocol
 TS1_Name=['TA_U','TF_U','TA_M','TF_M','TW_IN','TW_OUT']
@@ -65,10 +70,37 @@ while True:
                 continue
     
     # GROUP DATA WITH DATE
-    TS_NAME=['Date']+TS1_Name+TS2_Name
+    TS_NAME=['DateTime']+TS1_Name+TS2_Name
     TS_Unit=['']+TS1_Unit+TS2_Unit
+    TS_ColName=[]
+    for iN in range(len(TS_Name)):
+        TS_ColName.append(TS_Name[iN]+' ('+ TS_Unit[iN]+')')
+        
     TS_Data=np.concatenate(([pd.to_datetime('today')],TS1_Data,TS2_Data))
     
     #Write to CSV
-    print(TS_Data)
+    #   if new start, overwrite file
+    #   else append last and check linecount, if too long, drop 1st line
+    
+    # print(TS_Data)
+    if reset_tempData:  
+        # Create Pandas DataFrame with header
+        temp_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
+        temp_df.to_csv(file_tempSensor,mode='w',header=True)
+        
+        reset_tempData=False
+    else:
+        # Read CSV as pandas DataFrame
+
+
+        read_df=pd.read_csv(file_tempSensor)
+        newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
+        temp_df=read_df.append(df_newLine)
+        
+        # remove 1st line if too long
+        dfCount=len(df3.index)+1
+        if dfCount>file_maxLines:
+            temp_df=temp_df.drop(temp_df.index[[0]])
+            
+        temp_df.to_csv(file_tempSensor,mode='w',header=True)
     
