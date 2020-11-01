@@ -41,6 +41,7 @@ DHT_SENS=[]
 DHT_SENS.append(adafruit_dht.DHT11(board.D12))
 DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
+print('Setup completed, running temperature measurement')
 # INFINITE LOOP 
 while True:
 
@@ -70,7 +71,7 @@ while True:
                 continue
     
     # GROUP DATA WITH DATE
-    TS_NAME=['DateTime']+TS1_Name+TS2_Name
+    TS_Name=['DateTime']+TS1_Name+TS2_Name
     TS_Unit=['']+TS1_Unit+TS2_Unit
     TS_ColName=[]
     for iN in range(len(TS_Name)):
