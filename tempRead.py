@@ -96,10 +96,10 @@ while True:
 
         read_df=pd.read_csv(file_tempSensor)
         newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
-        temp_df=read_df.append(newLine_df)
+        temp_df=read_df.append(newLine_df,sort=False)
         
         # remove 1st line if too long
-        dfCount=len(df3.index)+1
+        dfCount=len(temp_df.index)+1
         if dfCount>file_maxLines:
             temp_df=temp_df.drop(temp_df.index[[0]])
             
