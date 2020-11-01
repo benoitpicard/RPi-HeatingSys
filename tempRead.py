@@ -9,13 +9,14 @@ import pandas as pd
 from w1thermsensor import W1ThermSensor
 import board
 import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
+import psutil
 
-# FILE NAME
+# --- FILE NAME ---
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
 file_maxLines=10000
 reset_tempData=True
 
-# SENSOR LIST (DS18B20)
+# --- SENSOR LIST (DS18B20) ---
 # RPi pin no default in used (GPIO4) for 1-wire protocol
 TS1_Name=['TA_U','TF_U','TA_M','TF_M','TW_IN','TW_OUT']
 TS1_Unit=['C','C','C','C','C','C']
@@ -28,12 +29,17 @@ TS1_ID=['01144bf1efaa',
     ]
 TS1_Count=len(TS1_Name)
 
-# DS18B20 SETUP
+# --- DS18B20 SETUP ---
 DS18B20_SENS=[]
 for iS in range(TS1_Count):
     DS18B20_SENS.append(W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, TS1_ID[iS]))
 
-# DHT SETUP
+# --- DHT SETUP --- 
+#   issue with PulseIn process being stuck after closing first iteration: 'kill' #https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/27
+for proc in psutil.process_iter():
+...     if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
+...             proc.kill()
+#   setup name
 TS2_Name=['TA_UD','HA_UD','TA_MD','HA_MD']
 TS2_Unit=['C','%','C','%']
 TS2_Count=len(TS2_Name)
@@ -41,8 +47,8 @@ DHT_SENS=[]
 DHT_SENS.append(adafruit_dht.DHT11(board.D12))
 DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
-print('['+pd.to_datetime('today')+'] tempRead.py: Setup completed, running temperature measurement')
-# INFINITE LOOP 
+print('[%s] tempRead.py: Setup completed, running temperature measurement' % pd.to_datetime('today'))
+# --- INFINITE LOOP ---
 while True:
 
     # Restart every 5s:
@@ -105,5 +111,5 @@ while True:
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
         
-    print('['+ pd.to_datetime('today')+'] tempRead.py: Temp data saved to csv (' + file_tempSensor + ')')
+    print('[%s] tempRead.py: Temp data saved to csv (%s)' % (pd.to_datetime('today'),file_tempSensor))
     
