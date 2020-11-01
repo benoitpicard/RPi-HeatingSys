@@ -104,5 +104,5 @@ while True:
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
         
-    print('Temp data recorded and saved to csv (' + file_tempSensor + '))
+    print('Temp data recorded and saved to csv (' + file_tempSensor + ')')
     
