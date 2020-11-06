@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+# READ CSV COMMAND (FIRST LINE) AND CONTROL OUTPUT TO RELAY BOARD
+
 import RPi.GPIO as GPIO
 import csv
 import time
+
+file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
 
 # RELAY SETUP
 GPIO.setmode(GPIO.BOARD)
@@ -21,7 +25,7 @@ try:
     
         time.sleep(10)
         
-        with open("../RPi-HeatingSys-Data/valveCmd.csv") as csvFile:
+        with open(file_valveCmd) as csvFile:
             csv_reader = csv.reader(csvFile)
             csv_headings = next(csv_reader) #read 1st csv line
             cmd_line = next(csv_reader) #read second csv line (cmd)
@@ -29,10 +33,10 @@ try:
         for iP in range(4):
             #Get RelayPinNo
             pinNo=RelayPinNo[iP]
-            
-            if cmd_line[iP+2]=='1':
+            cmd_OnOff=cmd_line[iP+3]
+            if cmd_OnOff=='1':
                 GPIO.output(pinNo,GPIO.LOW)
-            elif cmd_line[iP+2]=='0':
+            elif cmd_OnOff=='0':
                 GPIO.output(pinNo,GPIO.HIGH)
             else:
                 GPIO.output(pinNo,GPIO.HIGH)

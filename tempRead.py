@@ -13,7 +13,7 @@ import psutil
 
 # --- FILE NAME ---
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
-file_maxLines=10000
+file_maxLines=100
 reset_tempData=True
 
 # --- SENSOR LIST (DS18B20) ---
@@ -47,7 +47,7 @@ DHT_SENS=[]
 DHT_SENS.append(adafruit_dht.DHT11(board.D12))
 DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
-print('[%s] tempRead.py: Setup completed, running temperature measurement' % pd.to_datetime('today'))
+print('[%.19s] tempRead.py: Setup completed, starting measurement' % pd.to_datetime('today'))
 # --- INFINITE LOOP ---
 while True:
 
@@ -111,5 +111,5 @@ while True:
             
         temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
         
-    print('[%s] tempRead.py: Temp data saved to csv (%s)' % (pd.to_datetime('today'),file_tempSensor))
+    print('[%.19s] tempRead.py: Data saved to csv (%s)' % (pd.to_datetime('today'),file_tempSensor))
     
