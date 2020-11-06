@@ -44,6 +44,8 @@ def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef):
     TF=dfSS.iloc[indexPS]['TF (C)']
     return TA, TF
 
+print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
+
 # --- START INFINITE LOOP ---
 while True:
     time.sleep(120)
@@ -63,7 +65,7 @@ while True:
     # Read and fit into array by zone
     targetTemp={}
     NameList=[]
-    DataList=[]
+    DataList=()
     for Zone in typeZone:
         # Get target temperature from each zone
         targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef)
@@ -91,13 +93,13 @@ while True:
     
     # --- Save data to recording file ---
     # Combine data
-    dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd])
+    dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0]])
     dataAll=dataAll.to_frame().T.set_index('DateTime')
     # Save to file - Check Date and reset for new filename each day
     if nowDateTime.strftime('%Y%m%d')!=fileDay
         fileDay=nowDateTime.strftime('%Y%m%d')
         # Create new name
-        file_controlSys='../RPi-HeatingSys-Data/controlSys_'+fileDay+'.csv'
+        file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data_.csv'
         # Save Pandas DataFrame with header
         dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
    else:
