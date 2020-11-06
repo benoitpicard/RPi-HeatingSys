@@ -96,13 +96,13 @@ while True:
     dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0]])
     dataAll=dataAll.to_frame().T.set_index('DateTime')
     # Save to file - Check Date and reset for new filename each day
-    if nowDateTime.strftime('%Y%m%d')!=fileDay
+    if nowDateTime.strftime('%Y%m%d')!=fileDay:
         fileDay=nowDateTime.strftime('%Y%m%d')
         # Create new name
         file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data_.csv'
         # Save Pandas DataFrame with header
         dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
-   else:
+    else:
         # Save Pandas DataFrame with header
         dataAll.to_csv(file_controlSys,mode='a',header=False,index=True)
     
