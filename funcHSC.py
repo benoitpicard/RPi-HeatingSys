@@ -108,7 +108,7 @@ while True:
     
     # --- Save to relay csv ---
     if overrideOff: #change controls only if override is OFF (0)
-        new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=True)
+        new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=False)
     
     # --- Prep next loop
     #   Set last date for next iteration
