@@ -20,12 +20,19 @@ reset_tempData=True
 # RPi pin no default in used (GPIO4) for 1-wire protocol
 TS1_Name=['TA_U','TF_U','TA_M','TF_M','TW_IN','TW_OUT']
 TS1_Unit=['C','C','C','C','C','C']
-TS1_ID=['01144bf1efaa',
-    '01145167b9aa',
-    '000005675be3',
-    '01144b8b70aa',
-    '0114515ff8aa',
-    '0114515740aa'
+TS1_ID=['01144bf1efaa', #'TA_U'
+    '01145167b9aa', #'TF_U'
+    '000005675be3', #'TA_M'
+    '01144b8b70aa', #'TF_M'
+    '0114515ff8aa', #'TW_IN'
+    '0114515740aa'  #'TW_OUT'
+    ]
+TS1_ID=['01144bf1efaa', #'TA_U'
+    '01144bf1efaa', #'TF_U'
+    '000005675be3', #'TA_M'
+    '000005675be3', #'TF_M'
+    '000005675be3', #'TW_IN'
+    '000005675be3'  #'TW_OUT'
     ]
 TS1_Count=len(TS1_Name)
 

@@ -68,7 +68,7 @@ try:
                 errorActive=True
                 continue
             
-        if errorActive
+        if errorActive:
             print('   --- abort loop ---')
             break
         
