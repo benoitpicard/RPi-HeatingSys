@@ -58,7 +58,7 @@ try:
 except KeyboardInterrupt:
     print("Manual Quit: OK")
 except:
-    print('[%.19s] valveControl.py: error in execution, exiting' % (pd.to_datetime('today'),attempt))
+    print('[%.19s] valveControl.py: error in execution, exiting' % pd.to_datetime('today'))
     traceback.print_exc(file=sys.stdout)
 
 GPIO.cleanup()
