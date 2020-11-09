@@ -16,11 +16,12 @@ file_tempSetpoint="../RPi-HeatingSys-Data/tempSetpoint.csv"
 file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
 lastDateTime=pd.to_datetime('today')
 fileDay=""
+exitFlag=False
 
 # Setup
 typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd']
 typeZone=['Upstair','Main']
-valveName=['V1T','V2M']
+valveName=['V1U','V2M']
 
 # Subfunctions
 def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef):
@@ -142,11 +143,14 @@ except:
     print('[%.19s] funcHSC.py: error reading file_tempSensor (attemp#%d)' % (pd.to_datetime('today'),attempt))
     traceback.print_exc(file=sys.stdout)
                 
+
+if not exitFlag:
+    # Ensure not continuous heating: request an exit on valveCmd.py too 
+    read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
+    new_valveCmd=read_valveCmd
+    new_valveCmd.loc[0,'ExitFlag']=1
+    new_valveCmd.loc[0,'DateTime']=nowDateTime
+    new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=False)
+    print('[%.19s] funcHSC.py: ExitFlag in valveCmd csv set to 1' % pd.to_datetime('today'))
+    
 print('[%.19s] funcHSC.py: function exit' % pd.to_datetime('today'))
-# Ensure not continuous heating: request an exit on valveCmd.py too 
-read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
-new_valveCmd=read_valveCmd
-new_valveCmd.loc[0,'ExitFlag']=1
-new_valveCmd.loc[0,'DateTime']=nowDateTime
-new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=False)
-print('[%.19s] funcHSC.py: ExitFlag in valveCmd csv set to 1' % pd.to_datetime('today'))
