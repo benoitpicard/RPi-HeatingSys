@@ -42,7 +42,7 @@ try:
         for iP in range(4):
             #Get RelayPinNo
             pinNo=RelayPinNo[iP]
-            valveCmd=new_valveCmd.loc[0,valveName[iP]]
+            valveCmd=read_valveCmd.loc[0,valveName[iP]]
             
             if valveCmd:
                 GPIO.output(pinNo,GPIO.LOW)
