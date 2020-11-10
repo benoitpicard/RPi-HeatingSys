@@ -54,6 +54,7 @@ try:
         time.sleep(120)
         
         # --- Import Data & Average ---
+        # Reading csv file with trials to avoid simulatneous reading errors
         errorActive=False
         for attempt in range(3):
             try:
@@ -68,7 +69,6 @@ try:
                     print('   --- continuing ---')
                 errorActive=True
                 continue
-            
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -82,7 +82,24 @@ try:
         temp_Meas['dataAvg (Count)']=np.sum(boolCurWindow)
         
         # --- Import control setpoint ---
-        read_tempSetpoint=(pd.read_csv(file_tempSetpoint)) #read csv with pandas
+        # Reading csv file with trials to avoid simulatneous reading errors
+        errorActive=False
+        for attempt in range(3):
+            try:
+                #read csv with pandas
+                read_tempSetpoint=(pd.read_csv(file_tempSetpoint))
+                errorActive=False
+            except:
+                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
+                print('[%.19s] funcHSC.py: error reading file_tempSetpoint (attemp#%d)' % (pd.to_datetime('today'),attempt))
+                traceback.print_exc(file=sys.stdout)
+                if attempt<3:
+                    print('   --- continuing ---')
+                errorActive=True
+                continue
+        if errorActive:
+            print('   --- abort loop ---')
+            break
         # Read and fit into array by zone
         targetTemp={}
         NameList=[]
@@ -97,7 +114,24 @@ try:
         temp_Target=pd.Series(DataList,NameList)
         
         # --- Control logic ---
-        read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
+        # Reading csv file with trials to avoid simulatneous reading errors
+        errorActive=False
+        for attempt in range(3):
+            try:
+                #read csv with pandas
+                read_valveCmd=(pd.read_csv(file_valveCmd))
+                errorActive=False
+            except:
+                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
+                print('[%.19s] funcHSC.py: error reading file_valveCmd (attemp#%d)' % (pd.to_datetime('today'),attempt))
+                traceback.print_exc(file=sys.stdout)
+                if attempt<3:
+                    print('   --- continuing ---')
+                errorActive=True
+                continue
+        if errorActive:
+            print('   --- abort loop ---')
+            break
         overrideOff=read_valveCmd.loc[0,'Override']==0
         exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
         # exit control through valveCmd csv:

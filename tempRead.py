@@ -121,7 +121,24 @@ try:
             temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
             
         # Abort method: if valveCmd.csv contains the exitflag
-        read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
+        # Reading csv file with trials to avoid simulatneous reading errors
+        errorActive=False
+        for attempt in range(3):
+            try:
+                #read csv with pandas
+                read_valveCmd=(pd.read_csv(file_valveCmd))
+                errorActive=False
+            except:
+                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
+                print('[%.19s] tempRead.py: error reading file_valveCmd (attemp#%d)' % (pd.to_datetime('today'),attempt))
+                traceback.print_exc(file=sys.stdout)
+                if attempt<3:
+                    print('   --- continuing ---')
+                errorActive=True
+                continue
+        if errorActive:
+            print('   --- abort loop ---')
+            break
         exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
         # exit control through valveCmd csv:
         if exitFlag:
@@ -138,7 +155,7 @@ if not exitFlag:
     read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
     new_valveCmd=read_valveCmd
     new_valveCmd.loc[0,'ExitFlag']=1
-    new_valveCmd.loc[0,'DateTime']=nowDateTime
+    new_valveCmd.loc[0,'DateTime']=pd.to_datetime('today')
     new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=False)
     print('[%.19s] tempRead.py: ExitFlag in valveCmd csv set to 1' % pd.to_datetime('today'))
     
