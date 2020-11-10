@@ -8,14 +8,13 @@
 import time
 import numpy as np
 import pandas as pd
-import sys, traceback
+import os, sys, traceback
 
 # Initialization
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
 file_tempSetpoint="../RPi-HeatingSys-Data/tempSetpoint.csv"
 file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
 lastDateTime=pd.to_datetime('today')
-fileDay=""
 exitFlag=False
 
 # Setup
@@ -154,15 +153,14 @@ try:
         # Combine data
         dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0]])
         dataAll=dataAll.to_frame().T.set_index('DateTime')
-        # Save to file - Check Date and reset for new filename each day
-        if nowDateTime.strftime('%Y%m%d')!=fileDay:
-            fileDay=nowDateTime.strftime('%Y%m%d')
-            # Create new name
-            file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data_.csv'
-            # Save Pandas DataFrame with header
+        # Save to file - Check Date and reset for new filename each day (or if file not found)
+        fileDay=nowDateTime.strftime('%Y%m%d')
+        file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data_.csv'
+        if: not os.path.isfile(file_controlSys) 
+            # If file does not exist
             dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
         else:
-            # Save Pandas DataFrame with header
+            # Append to file
             dataAll.to_csv(file_controlSys,mode='a',header=False,index=True)
         
         # --- Save to relay csv ---
