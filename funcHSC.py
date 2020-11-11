@@ -157,7 +157,7 @@ try:
         # Save to file - Check Date and reset for new filename each day (or if file not found)
         fileDay=nowDateTime.strftime('%Y%m%d')
         file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data_.csv'
-        if: not os.path.isfile(file_controlSys) 
+        if not os.path.isfile(file_controlSys):
             # If file does not exist
             dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
         else:
