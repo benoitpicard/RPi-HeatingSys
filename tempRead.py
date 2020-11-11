@@ -144,6 +144,7 @@ try:
         exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
         # exit control through valveCmd csv:
         if exitFlag:
+            print('[%.19s] tempRead.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
             break
 
 except:

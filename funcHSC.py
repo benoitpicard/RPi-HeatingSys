@@ -62,11 +62,12 @@ try:
                 errorActive=False
             except:
                 #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] funcHSC.py: error reading file_tempSensor (attemp#%d)' % (pd.to_datetime('today'),attempt))
+                print('[%.19s] funcHSC.py: error reading file_tempSensor (attempt#%d)' % (pd.to_datetime('today'),attempt))
                 traceback.print_exc(file=sys.stdout)
                 if attempt<3:
                     print('   --- continuing ---')
                 errorActive=True
+                time.sleep(0.5)
                 continue
         if errorActive:
             print('   --- abort loop ---')
@@ -122,7 +123,7 @@ try:
                 errorActive=False
             except:
                 #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] funcHSC.py: error reading file_valveCmd (attemp#%d)' % (pd.to_datetime('today'),attempt))
+                print('[%.19s] funcHSC.py: error reading file_valveCmd (attempt#%d)' % (pd.to_datetime('today'),attempt))
                 traceback.print_exc(file=sys.stdout)
                 if attempt<3:
                     print('   --- continuing ---')
@@ -172,7 +173,7 @@ try:
         lastDateTime=nowDateTime
 except:
     #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-    print('[%.19s] funcHSC.py: error reading file_tempSensor (attemp#%d)' % (pd.to_datetime('today'),attempt))
+    print('[%.19s] funcHSC.py: error in execution, exiting' % pd.to_datetime('today'))
     traceback.print_exc(file=sys.stdout)
                 
 

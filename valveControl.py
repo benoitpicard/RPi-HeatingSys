@@ -70,8 +70,9 @@ try:
                 print("Wrong input, forced pin %d off (%s)" % (pinNo,valveName[iP]))
          
         if read_valveCmd.loc[0,'ExitFlag']==1: # exit loop
+            print('[%.19s] valveControl.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
             break
-             
+            
 except KeyboardInterrupt:
     print("Manual Quit: OK")
 except:
