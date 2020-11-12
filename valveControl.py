@@ -27,7 +27,7 @@ for pinNo in RelayPinNo:
     GPIO.output(pinNo,GPIO.HIGH)
 
 # Restart with ExitFlag OFF:
-read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
+read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
  #read csv with pandas
 new_valveCmd=read_valveCmd
 new_valveCmd.loc[0,'ExitFlag']=0
@@ -44,7 +44,7 @@ try:
         time.sleep(10)
         
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
         if errorActive:
             print('   --- abort loop ---')
             break

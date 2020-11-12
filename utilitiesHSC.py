@@ -1,5 +1,5 @@
 # Extract Temperature setpoint from pandas structure dataframe
-def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef):
+def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef,pd):
     # --- Get previous setpoint based on given time ---
     # ---   (returns the last time that has past)
     # Slice Setpoint DataFrame by Week/End and Zone
@@ -22,7 +22,7 @@ def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef):
     return TA, TF
 
 # Read CSV with pandas with try/except loop
-def tryReadCSV(file_name,index):
+def tryReadCSV(file_name,index,pd):
     attemptCount=5
     for attempt in range(attemptCount):
         try:

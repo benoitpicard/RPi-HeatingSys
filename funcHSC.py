@@ -35,7 +35,7 @@ try:
         
         # --- Import Data & Average ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempSensor,errorActive=tryReadCSV(file_tempSensor,'DateTime ()')
+        read_tempSensor,errorActive=tryReadCSV(file_tempSensor,'DateTime ()',pd)
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -50,7 +50,7 @@ try:
         
         # --- Import control setpoint ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'')
+        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'',pd)
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -60,7 +60,7 @@ try:
         DataList=()
         for Zone in typeZone:
             # Get target temperature from each zone
-            targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef)
+            targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef,pd)
             # Prepare Data for a Pandas Serie
             NameList=NameList+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
             DataList=DataList+targetTemp[Zone]  
@@ -69,7 +69,7 @@ try:
         
         # --- Control logic ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
         if errorActive:
             print('   --- abort loop ---')
             break

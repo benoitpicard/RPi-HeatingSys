@@ -114,7 +114,10 @@ try:
             reset_tempData=False
         else:
             # Read CSV as pandas DataFrame
-            read_df=(pd.read_csv(file_tempSensor)).set_index(TS_ColName[0])
+            read_df,errorActive=tryReadCSV(file_tempSensor,TS_ColName[0],pd)
+            if errorActive:
+                print('   --- abort loop ---')
+                break
             newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
             temp_df=read_df.append(newLine_df,sort=False)
             
@@ -127,7 +130,7 @@ try:
             
         # Abort method: if valveCmd.csv contains the exitflag
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -145,7 +148,7 @@ except:
 
 if not exitFlag:
     # Ensure not continuous heating: request an exit on valveCmd.py too 
-    read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'') #read csv with pandas
+    read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd) #read csv with pandas
     new_valveCmd=read_valveCmd
     new_valveCmd.loc[0,'ExitFlag']=1
     new_valveCmd.loc[0,'DateTime']=pd.to_datetime('today')
