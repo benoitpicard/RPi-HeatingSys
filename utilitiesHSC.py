@@ -4,8 +4,8 @@ def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef,pd):
     # ---   (returns the last time that has past)
     # Slice Setpoint DataFrame by Week/End and Zone
     DayRef=typeDayRef[nowDateTime.weekday()]
-    dfSS=read_tempSetpoint[(read_tempSetpoint['Day']==DayRef) &
-        (read_tempSetpoint['Zone']==Zone)]
+    dfSS=dfSetpoint[(dfSetpoint['Day']==DayRef) &
+        (dfSetpoint['Zone']==Zone)]
     # Convert to timedelta for easy comparison
     dfSS['Time']=pd.to_timedelta(dfSS['Time'])
     nowTimeD=pd.to_timedelta(nowDateTime-pd.Timestamp.normalize(nowDateTime))
