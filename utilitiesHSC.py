@@ -1,3 +1,5 @@
+import sys
+
 # Extract Temperature setpoint from pandas structure dataframe
 def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef,pd):
     # --- Get previous setpoint based on given time ---
