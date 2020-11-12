@@ -29,7 +29,7 @@ def tryReadCSV(file_name,index,pd):
             #read csv with pandas and replace index with date
             readCSV=pd.read_csv(file_name)
             if index!='':
-                readCSV.set_index(index)
+                readCSV=readCSV.set_index(index)
             errorActive=False
             break
         except:
