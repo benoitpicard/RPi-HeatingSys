@@ -5,10 +5,14 @@
 #   Import control logic from csv
 #   Assign relay control to csv (used by valveControl.py)
 
+# Import main modules
 import time
 import numpy as np
 import pandas as pd
 import os, sys, traceback
+# Import code functions
+from utilitiesHSC import getSetpointTemp
+from utilitiesHSC import tryReadCSV
 
 # Initialization
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
@@ -22,29 +26,6 @@ typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd']
 typeZone=['Upstair','Main']
 valveName=['V1U','V2M']
 
-# Subfunctions
-def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef):
-    # --- Get previous setpoint based on given time ---
-    # ---   (returns the last time that has past)
-    # Slice Setpoint DataFrame by Week/End and Zone
-    DayRef=typeDayRef[nowDateTime.weekday()]
-    dfSS=read_tempSetpoint[(read_tempSetpoint['Day']==DayRef) &
-        (read_tempSetpoint['Zone']==Zone)]
-    # Convert to timedelta for easy comparison
-    dfSS['Time']=pd.to_timedelta(dfSS['Time'])
-    nowTimeD=pd.to_timedelta(nowDateTime-pd.Timestamp.normalize(nowDateTime))
-    dfSL=dfSS[dfSS.Time<nowTimeD]
-    # Find index of last valid setpoint
-    lastIndexPS=len(dfSL.index)
-    if lastIndexPS>0:
-        indexPS=lastIndexPS-1
-    else:
-        indexPS=len(dfSS.index)-1
-    # Return setpoint
-    TA=dfSS.iloc[indexPS]['TA (C)']
-    TF=dfSS.iloc[indexPS]['TF (C)']
-    return TA, TF
-
 print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
 
 # --- START INFINITE LOOP ---
@@ -54,25 +35,11 @@ try:
         
         # --- Import Data & Average ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        errorActive=False
-        for attempt in range(3):
-            try:
-                #read csv with pandas and replace index with date
-                read_tempSensor=(pd.read_csv(file_tempSensor)).set_index('DateTime ()')
-                errorActive=False
-            except:
-                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] funcHSC.py: error reading file_tempSensor (attempt#%d)' % (pd.to_datetime('today'),attempt))
-                traceback.print_exc(file=sys.stdout)
-                if attempt<3:
-                    print('   --- continuing ---')
-                errorActive=True
-                time.sleep(0.5)
-                continue
+        read_tempSensor,errorActive=tryReadCSV(file_tempSensor,'DateTime ()')
         if errorActive:
             print('   --- abort loop ---')
             break
-        
+
         read_tempSensor.index=pd.to_datetime(read_tempSensor.index) #convert read string date to pandas date
         #   Get data in current time window
         nowDateTime=pd.to_datetime('today')
@@ -83,20 +50,7 @@ try:
         
         # --- Import control setpoint ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        errorActive=False
-        for attempt in range(3):
-            try:
-                #read csv with pandas
-                read_tempSetpoint=(pd.read_csv(file_tempSetpoint))
-                errorActive=False
-            except:
-                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] funcHSC.py: error reading file_tempSetpoint (attemp#%d)' % (pd.to_datetime('today'),attempt))
-                traceback.print_exc(file=sys.stdout)
-                if attempt<3:
-                    print('   --- continuing ---')
-                errorActive=True
-                continue
+        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'')
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -115,20 +69,7 @@ try:
         
         # --- Control logic ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        errorActive=False
-        for attempt in range(3):
-            try:
-                #read csv with pandas
-                read_valveCmd=(pd.read_csv(file_valveCmd))
-                errorActive=False
-            except:
-                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] funcHSC.py: error reading file_valveCmd (attempt#%d)' % (pd.to_datetime('today'),attempt))
-                traceback.print_exc(file=sys.stdout)
-                if attempt<3:
-                    print('   --- continuing ---')
-                errorActive=True
-                continue
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
         if errorActive:
             print('   --- abort loop ---')
             break

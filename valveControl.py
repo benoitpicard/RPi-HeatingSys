@@ -2,12 +2,16 @@
 
 # READ CSV COMMAND (FIRST LINE) AND CONTROL OUTPUT TO RELAY BOARD
 
+# Import main modules
 import RPi.GPIO as GPIO
 import csv
 import time
 import sys, traceback
 import pandas as pd
+# Import code functions
+from utilitiesHSC import tryReadCSV
 
+# --- Initialisation ---
 file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
 
 # RELAY SETUP
@@ -23,7 +27,8 @@ for pinNo in RelayPinNo:
     GPIO.output(pinNo,GPIO.HIGH)
 
 # Restart with ExitFlag OFF:
-read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
+read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
+ #read csv with pandas
 new_valveCmd=read_valveCmd
 new_valveCmd.loc[0,'ExitFlag']=0
 new_valveCmd.loc[0,'DateTime']=pd.to_datetime('today')
@@ -39,20 +44,7 @@ try:
         time.sleep(10)
         
         # Reading csv file with trials to avoid simulatneous reading errors
-        errorActive=False
-        for attempt in range(3):
-            try:
-                #read csv with pandas
-                read_valveCmd=(pd.read_csv(file_valveCmd))
-                errorActive=False
-            except:
-                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] valveControl.py: error reading file_valveCmd (attemp#%d)' % (pd.to_datetime('today'),attempt))
-                traceback.print_exc(file=sys.stdout)
-                if attempt<3:
-                    print('   --- continuing ---')
-                errorActive=True
-                continue
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
         if errorActive:
             print('   --- abort loop ---')
             break

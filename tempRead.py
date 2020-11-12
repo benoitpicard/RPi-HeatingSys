@@ -3,6 +3,7 @@
 # READ TEMP AND HUMIDITY SENSOR, RETURN RESULTS IN CSV FILE
 # T:Temp, H:Humidity, A:Air, F:Floor, M:Main, U:Upstair, W:Water
 
+# Import main modules
 import time
 import numpy as np
 import pandas as pd
@@ -11,6 +12,8 @@ import board
 import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
 import psutil
 import sys, traceback
+# Import code functions
+from utilitiesHSC import tryReadCSV
 
 # --- Initialisation ---
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
@@ -124,20 +127,7 @@ try:
             
         # Abort method: if valveCmd.csv contains the exitflag
         # Reading csv file with trials to avoid simulatneous reading errors
-        errorActive=False
-        for attempt in range(3):
-            try:
-                #read csv with pandas
-                read_valveCmd=(pd.read_csv(file_valveCmd))
-                errorActive=False
-            except:
-                #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
-                print('[%.19s] tempRead.py: error reading file_valveCmd (attemp#%d)' % (pd.to_datetime('today'),attempt))
-                traceback.print_exc(file=sys.stdout)
-                if attempt<3:
-                    print('   --- continuing ---')
-                errorActive=True
-                continue
+        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'')
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -155,7 +145,7 @@ except:
 
 if not exitFlag:
     # Ensure not continuous heating: request an exit on valveCmd.py too 
-    read_valveCmd=(pd.read_csv(file_valveCmd)) #read csv with pandas
+    read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'') #read csv with pandas
     new_valveCmd=read_valveCmd
     new_valveCmd.loc[0,'ExitFlag']=1
     new_valveCmd.loc[0,'DateTime']=pd.to_datetime('today')
