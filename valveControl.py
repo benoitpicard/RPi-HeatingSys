@@ -20,7 +20,7 @@ GPIO.setmode(GPIO.BOARD)
 # Relay2: GPIO6 PIN31 - V2M MAIN FLOOR HEATING
 # Relay3: GPIO13 PIN33 - V3G GARAGE HEATING
 # Relay4: GPIO19 PIN35 - NOT USED
-RelayPinNo=(29,31,33,35) #matching order to valve name
+RelayPinNo=(33,31,29,35) #matching order to valve name
 valveName=['V1U','V2M','V3G','V4E'] #mathing order to relay pins
 for pinNo in RelayPinNo:
     GPIO.setup(pinNo,GPIO.OUT)

@@ -35,10 +35,10 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     ]
 TS1_ID=['01144bf1efaa', #'TA_U'
     '01144bf1efaa', #'TF_U'
-    '000005675be3', #'TA_M'
-    '000005675be3', #'TF_M'
-    '000005675be3', #'TW_IN'
-    '000005675be3'  #'TW_OUT'
+    '01144b8b70aa', #'TA_M'
+    '01144b8b70aa', #'TF_M'
+    '0114515ff8aa', #'TW_IN'
+    '0114515740aa'  #'TW_OUT'
     ]
 TS1_Count=len(TS1_Name)
 
