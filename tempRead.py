@@ -76,7 +76,7 @@ try:
         
         # DS18B20 SENSOR READ
         for iS in range(TS1_Count):
-            for attempt in range(2):
+            for attempt in range(5):
                 try:
                     TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
                 except:
