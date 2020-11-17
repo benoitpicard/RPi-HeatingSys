@@ -65,8 +65,8 @@ print('[%.19s] tempRead.py: Setup completed, starting measurement' % pd.to_datet
 try:
     while True:
 
-        # Restart every 5s:
-        time.sleep(1)
+        # Run near continuous:
+        time.sleep(0.5)
         
         # Init to NaN
         TS1_Data=np.empty(TS1_Count)
@@ -79,9 +79,11 @@ try:
             for attempt in range(5):
                 try:
                     TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
+                    break
                 except:
-                    continue
-            time.sleep(0.5)
+                    pass
+                time.sleep(0.1)
+            time.sleep(0.1)
                 
         # DHT SENSOR READ
         for iS in range(TS2_Count):
@@ -89,9 +91,11 @@ try:
                 try:
                     TS2_Data[iS*2]=DHT_SENS[iS].temperature
                     TS2_Data[iS*2+1]=DHT_SENS[iS].humidity
+                    break
                 except:
-                    continue
-            time.sleep(0.5)
+                    pass
+                time.sleep(0.1)
+            time.sleep(0.1)
         
         # GROUP DATA WITH DATE
         TS_Name=['DateTime']+TS1_Name+TS2_Name
