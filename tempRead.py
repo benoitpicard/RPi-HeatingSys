@@ -75,19 +75,20 @@ try:
         TS2_Data[:]=np.nan
         
         # DS18B20 SENSOR READ
-        attemptCount=5
+        attemptCount=10
         for iS in range(TS1_Count):
             for attempt in range(attemptCount):
                 try:
                     TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
                     break
                 except:
-                    print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
-                        (pd.to_datetime('today'),TS1_ID[iS],attempt))
-                    traceback.print_exc(file=sys.stdout)
-                    if attempt<attemptCount-1:
-                        print('   --- continuing ---')
-                time.sleep(0.1)
+                    #print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
+                    #    (pd.to_datetime('today'),TS1_ID[iS],attempt))
+                    #traceback.print_exc(file=sys.stdout)
+                    #if attempt<attemptCount-1:
+                    #    print('   --- continuing ---')
+                    pass
+                time.sleep(0.5)
             time.sleep(0.1)
                 
         # DHT SENSOR READ
@@ -99,7 +100,7 @@ try:
                     break
                 except:
                     pass
-                time.sleep(0.1)
+                time.sleep(0.5)
             time.sleep(0.1)
         
         # GROUP DATA WITH DATE
