@@ -33,12 +33,10 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     '0114515ff8aa', #'TW_IN'
     '0114515740aa'  #'TW_OUT'
     ]
+TS1_Name=['TA_U','TA_M']
+TS1_Unit=['C','C']
 TS1_ID=['01144bf1efaa', #'TA_U'
-    '01144bf1efaa', #'TF_U'
     '01144b8b70aa', #'TA_M'
-    '01144b8b70aa', #'TF_M'
-    '0114515ff8aa', #'TW_IN'
-    '0114515740aa'  #'TW_OUT'
     ]
 TS1_Count=len(TS1_Name)
 
@@ -75,15 +73,15 @@ try:
         TS2_Data[:]=np.nan
         
         # DS18B20 SENSOR READ
-        attemptCount=10
+        attemptCount=3
         for iS in range(TS1_Count):
             for attempt in range(attemptCount):
                 try:
                     TS1_Data[iS]=DS18B20_SENS[iS].get_temperature()
                     break
                 except:
-                    #print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
-                    #    (pd.to_datetime('today'),TS1_ID[iS],attempt))
+                    print('[%.19s] Error reading sensor %s (attempt#%d)' % 
+                        (pd.to_datetime('today'),TS1_ID[iS],attempt))
                     #traceback.print_exc(file=sys.stdout)
                     #if attempt<attemptCount-1:
                     #    print('   --- continuing ---')
@@ -92,16 +90,16 @@ try:
             time.sleep(0.1)
                 
         # DHT SENSOR READ
-        for iS in range(TS2_Count):
-            for attempt in range(10):
-                try:
-                    TS2_Data[iS*2]=DHT_SENS[iS].temperature
-                    TS2_Data[iS*2+1]=DHT_SENS[iS].humidity
-                    break
-                except:
-                    pass
-                time.sleep(0.5)
-            time.sleep(0.1)
+        #for iS in range(TS2_Count):
+        #    for attempt in range(10):
+        #        try:
+        #            TS2_Data[iS*2]=DHT_SENS[iS].temperature
+        #            TS2_Data[iS*2+1]=DHT_SENS[iS].humidity
+        #            break
+        #        except:
+        #            pass
+        #        time.sleep(0.5)
+        #    time.sleep(0.1)
         
         # GROUP DATA WITH DATE
         TS_Name=['DateTime']+TS1_Name+TS2_Name
