@@ -13,7 +13,7 @@ def index():
 	for iP in range(4):
 		#Get Relay Status
 		valveCmd=read_valveCmd.loc[0,valveName[iP]]
-		outStr=outStr+valveName[iP]+ '_' + valveCmd
+		outStr=outStr+valveName[iP]+ '_' + str(valveCmd)
 		return outStr
 
 @app.route('/data')
