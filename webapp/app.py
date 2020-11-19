@@ -17,9 +17,9 @@ def index():
 		outStr=outStr+valveName[iP]+ '_' + valveCmd
 		return outStr
 
-@app.route('/test')
-def index():
-    return 'test1'
+@app.route('/data')
+def data():
+    return 'data test1'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
