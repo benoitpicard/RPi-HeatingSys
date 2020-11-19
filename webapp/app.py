@@ -12,7 +12,6 @@ def index():
 	outStr=str('[%.19s] ' % pd.to_datetime('today'))
 	for iP in range(4):
 		#Get Relay Status
-		pinNo=RelayPinNo[iP]
 		valveCmd=read_valveCmd.loc[0,valveName[iP]]
 		outStr=outStr+valveName[iP]+ '_' + valveCmd
 		return outStr
