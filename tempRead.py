@@ -36,7 +36,7 @@ TS1_ID=['01144bf1efaa', #'TA_U'
 TS1_Name=['TA_U','TA_M']
 TS1_Unit=['C','C']
 TS1_ID=['01144bf1efaa', #'TA_U'
-    '01144b8b70aa', #'TA_M'
+    '000005675be3', #'TA_M'
     ]
 TS1_Count=len(TS1_Name)
 
