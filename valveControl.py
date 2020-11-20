@@ -26,11 +26,12 @@ for pinNo in RelayPinNo:
     GPIO.setup(pinNo,GPIO.OUT)
     GPIO.output(pinNo,GPIO.HIGH)
 
-# Restart with ExitFlag OFF:
+# Restart with ExitFlag and Override OFF:
 read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
  #read csv with pandas
 new_valveCmd=read_valveCmd
 new_valveCmd.loc[0,'ExitFlag']=0
+new_valveCmd.loc[0,'Override']=0
 new_valveCmd.loc[0,'DateTime']=pd.to_datetime('today')
 new_valveCmd.to_csv(file_valveCmd,mode='w',header=True,index=False)
 print('[%.19s] valveControl.py: ExitFlag in valveCmd csv set to 0 (start-up)' % pd.to_datetime('today'))
