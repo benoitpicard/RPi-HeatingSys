@@ -22,7 +22,7 @@ def index():
     #controlSys status
     nowDateTime=pd.to_datetime('today')
     fileDay=nowDateTime.strftime('%Y%m%d')
-    file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    file_controlSys='../../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys=pd.read_csv(file_controlSys)
     controlSysCount=len(read_controlSys.index)
     currentData=read_controlSys.loc[controlSysCount-1,:]
