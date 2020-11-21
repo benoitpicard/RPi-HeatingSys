@@ -68,7 +68,7 @@ try:
         TS2_Data[:]=np.nan
         
         # DS18B20 SENSOR READ
-        attemptCount=3
+        attemptCount=5
         for iS in range(TS1_Count):
             for attempt in range(attemptCount):
                 try:
@@ -82,7 +82,7 @@ try:
                     #    print('   --- continuing ---')
                     pass
                 time.sleep(0.5)
-            time.sleep(0.1)
+            time.sleep(2)
                 
         # DHT SENSOR READ
         #for iS in range(TS2_Count):
