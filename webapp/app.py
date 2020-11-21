@@ -11,7 +11,7 @@ def index():
     file_valveCmd='../../RPi-HeatingSys-Data/valveCmd.csv'
     read_valveCmd=pd.read_csv(file_valveCmd)
     valveName=['V1U','V2M','V3G','V4E']
-    outStr=outStr+str('[%.19s] => current time' % ,pd.to_datetime('today'))
+    outStr=outStr+str('[%.19s] => current time' % pd.to_datetime('today'))
     outStr=outStr+str('\n[%.19s] ' % read_valveCmd['DateTime'].loc[0])
     for iP in range(4):
         #Get Relay Status
