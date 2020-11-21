@@ -8,16 +8,16 @@ app = Flask(__name__)
 def index():
     #valveCmd status
     outStr=''
-	file_valveCmd="../../RPi-HeatingSys-Data/valveCmd.csv"
-	read_valveCmd=pd.read_csv(file_valveCmd)
-	valveName=['V1U','V2M','V3G','V4E']
-	outStr=outStr+str('[%.19s] => current time' % ,pd.to_datetime('today'))
+    file_valveCmd='../../RPi-HeatingSys-Data/valveCmd.csv'
+    read_valveCmd=pd.read_csv(file_valveCmd)
+    valveName=['V1U','V2M','V3G','V4E']
+    outStr=outStr+str('[%.19s] => current time' % ,pd.to_datetime('today'))
     outStr=outStr+str('\n[%.19s] ' % read_valveCmd['DateTime'].loc[0])
-	for iP in range(4):
-		#Get Relay Status
-		valveCmd=read_valveCmd.loc[0,valveName[iP]]
-		outStr=outStr+valveName[iP]+ '=' + str(valveCmd) + '  '
-	outStr=outStr+'=> valveCmd.csv'
+    for iP in range(4):
+        #Get Relay Status
+        valveCmd=read_valveCmd.loc[0,valveName[iP]]
+        outStr=outStr+valveName[iP]+ '=' + str(valveCmd) + '  '
+    outStr=outStr+'=> valveCmd.csv'
     
     #controlSys status
     nowDateTime=pd.to_datetime('today')
@@ -27,8 +27,8 @@ def index():
     controlSysCount=len(read_controlSys.index)
     currentData=read_controlSys.loc[controlSysCount-1,:]
     outStr=outStr+'\n'+currentData.to_string()
-	return outStr
-
+    return outStr
+    
 @app.route('/data')
 def data():
 
