@@ -33,11 +33,6 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     '0114515ff8aa', #'TW_IN'
     '0114515740aa'  #'TW_OUT'
     ]
-TS1_Name=['TA_U','TA_M']
-TS1_Unit=['C','C']
-TS1_ID=['01144bf1efaa', #'TA_U'
-    '000005675be3', #'TA_M'
-    ]
 TS1_Count=len(TS1_Name)
 
 # --- DS18B20 SETUP ---
