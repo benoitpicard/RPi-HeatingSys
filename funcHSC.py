@@ -31,7 +31,7 @@ print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('
 # --- START INFINITE LOOP ---
 try:
     while True:
-        time.sleep(120)
+        time.sleep(119)
         
         # --- Import Data & Average ---
         # Reading csv file with trials to avoid simulatneous reading errors
