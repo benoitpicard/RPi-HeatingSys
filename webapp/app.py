@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import pandas as pd
 import numpy as np
 
@@ -27,12 +27,18 @@ def index():
     controlSysCount=len(read_controlSys.index)
     currentData=read_controlSys.loc[controlSysCount-1,:]
     outStr=outStr+'\n'+currentData.to_string()
-    return outStr
+    # return outStr
+    return render_template('home.html')
     
-@app.route('/data')
+@app.route('/home')
 def data():
 
-    return 'data test1'
+    return render_template('home.html')
+
+@app.route('/control')
+def data():
+
+    return render_template('control.html')
 
 @app.route('/today')
 def today():
