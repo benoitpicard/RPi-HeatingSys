@@ -33,7 +33,7 @@ def data():
     outStr=outStr+'\n'+currentData.to_string()
     # return outStr
  
-    return render_template('home_test.html',outStr)
+    return render_template('home_test.html',text=outStr)
 
 @app.route('/control')
 def control():
