@@ -6,6 +6,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+   return render_template('home.html')
+    
+@app.route('/home')
+def data():
     #valveCmd status
     outStr=''
     file_valveCmd='../../RPi-HeatingSys-Data/valveCmd.csv'
@@ -28,15 +32,11 @@ def index():
     currentData=read_controlSys.loc[controlSysCount-1,:]
     outStr=outStr+'\n'+currentData.to_string()
     # return outStr
-    return render_template('home.html')
-    
-@app.route('/home')
-def data():
-
-    return render_template('home.html')
+ 
+    return render_template('home_test.html',outStr)
 
 @app.route('/control')
-def data():
+def control():
 
     return render_template('control.html')
 
