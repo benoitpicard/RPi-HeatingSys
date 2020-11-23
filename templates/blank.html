@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <title>RPi - Home Heating System</title>
-<meta charset="UTF-8">
+<meta charset="UTF-8">¨
+<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">  <!--_black original, many color available!-->
@@ -23,7 +24,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <div class="w3-top">
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
-    <a href="home.html" class="w3-bar-item w3-button w3-theme-l1">RPi-HeatingSys</a>
+    <a href="home" class="w3-bar-item w3-button w3-theme-l1">RPi-HeatingSys</a>
     <a href="home" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
     <a href="control" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Control</a>
     <a href="data" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Data</a>
@@ -37,62 +38,29 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <i class="fa fa-remove"></i>
   </a>
   <h4 class="w3-bar-item"><b>Menu</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="home">Home</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="control">Control</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="data">Data</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="info">Info</a>
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<!-- START MAIN -->
+<!-- shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main" style="margin-left:250px">
-
-  <div class="w3-row w3-padding-64">
-    <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Heading</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-third w3-container">
-      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-    </div>
-  </div>
-
+	
 	<div class="w3-row w3-padding-64">
 	<div class="w3-container">
-	  <h2>Border Around Table</h2>
-	  <p>The w3-border class adds a border around the table.</p>
-
-	  <table class="w3-table w3-striped w3-border">
-		<tr>
-		  <th>First Name</th>
-		  <th>Last Name</th>
-		  <th>Points</th>
-		</tr>
-		<tr>
-		  <td>Jill</td>
-		  <td>Smith</td>
-		  <td>50</td>
-		</tr>
-		<tr>
-		  <td>Eve</td>
-		  <td>Jackson</td>
-		  <td>94</td>
-		</tr>
-		<tr>
-		  <td>Adam</td>
-		  <td>Johnson</td>
-		  <td>67</td>
-		</tr>
-	  </table>
+	  <h2>Section under construction ({{name}})</h2>
 	</div>
 	</div>	
+	
+<!-- FOOTER -->	
   <footer id="myFooter">
     <div class="w3-container w3-theme-l2 w3-padding-32">
-      <h4>Heating Control and Web App Design by Benoit Picard - <a href="mailto:picard.benoit@gmail.com">picard.benoit@gmail.com</a></h4>
+      <h4>Heating System Control and Web App Design by Benoit Picard <a href="mailto:picard.benoit@gmail.com">picard.benoit@gmail.com</a></h4>
     </div>
 
     <div class="w3-container w3-theme-l1">
