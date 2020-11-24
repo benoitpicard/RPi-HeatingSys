@@ -53,9 +53,14 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 	
 	<div class="w3-row w3-padding-64">
 	<div class="w3-container">
-	  <h2>Latest Records</h2>
-	  <p>Latest sensor and controller status (current time: {{currentTime}})</p>
-		{{tableHTML_1|safe}}
+	  <h2>Today's graph</h2>
+	  <p>Temperature for upstairs (U), main (M) zones and heated water temperature</p>
+	  <p>Current time: {{currentTime}}</p>
+	  
+		{% for img_path in imgs %}
+			<img src="{{img_path|safe}}" alt="Image not loading..."/>
+		{% endfor %}
+		
 	</div>
 	</div>	
 	
