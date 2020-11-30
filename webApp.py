@@ -88,6 +88,10 @@ def data():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data.html',imgs=figPath,currentTime=timeStr)
 
+@app.route('/test')
+def test():
+    return render_template('t2.html')
+
 @app.route('/<name>')
 def blank(name):
 

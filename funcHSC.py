@@ -18,6 +18,7 @@ from utilitiesHSC import tryReadCSV
 file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
 file_tempSetpoint="../RPi-HeatingSys-Data/tempSetpoint.csv"
 file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
+file_tempWeather="../RPi-HeatingSys-Data/dataTempWeather.csv"
 lastDateTime=pd.to_datetime('today')
 exitFlag=False
 
@@ -47,6 +48,11 @@ try:
         #   Average data in Pandas Serie
         temp_Meas=read_tempSensor[boolCurWindow].mean()
         temp_Meas['dataAvg (Count)']=np.sum(boolCurWindow)
+        
+        # --- Import Weather Current Data ---
+        # Reading csv file with trials to avoid simulatneous reading errors
+        read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
+        read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
         # --- Import control setpoint ---
         # Reading csv file with trials to avoid simulatneous reading errors
@@ -90,10 +96,12 @@ try:
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
+        else #change time even when overrides
+            new_valveCmd.loc[0,'DateTime']=nowDateTime
         
         # --- Save data to recording file ---
         # Combine data
-        dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0]])
+        dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0],read_tempWeather.iloc[0]])
         dataAll=dataAll.to_frame().T.set_index('DateTime')
         # Save to file - Check Date and reset for new filename each day (or if file not found)
         fileDay=nowDateTime.strftime('%Y%m%d')
