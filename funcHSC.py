@@ -96,7 +96,7 @@ try:
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
-        else #change time even when overrides
+        else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
         
         # --- Save data to recording file ---
