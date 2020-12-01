@@ -78,13 +78,8 @@ def data():
     yLists=[[['TA_M (C)','TF_M (C)','TA_M_TG (C)'],['V2M']], 
             [['TA_U (C)','TF_U (C)','TA_U_TG (C)'],['V1U']],
             [['TW_IN (C)','TW_OUT (C)'],['TW_dT (C)','TW_dTon (C)']]]
-    figObj=genFigHHMM(read_controlSys,xList,yLists,'','')
-    filePath='./static/'
-    figPath=[]
-    for iFO in range(len(figObj)):
-        figPath.append(filePath+'plot'+str(iFO+1)+'.jpg')
-        figObj[iFO].savefig(figPath[iFO]) #to save to local folder 
-    
+    figPath=genFigHHMM(read_controlSys,xList,yLists,'','','./static/')
+   
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data.html',imgs=figPath,currentTime=timeStr)
 

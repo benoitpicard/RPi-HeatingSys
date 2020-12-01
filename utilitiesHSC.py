@@ -69,7 +69,7 @@ def tryReadCSV_p(file_name,index,pd,attemptCount=5,parseCol=''):
     return readCSV, errorActive
     
 # Generate fig
-def genFigHHMM(df,xList,yLists,xLabel,yLabels):
+def genFigHHMM(df,xList,yLists,xLabel,yLabels,filePath):
     # Sizing def
     SMALL_SIZE = 12
     MEDIUM_SIZE = 14
@@ -81,7 +81,7 @@ def genFigHHMM(df,xList,yLists,xLabel,yLabels):
     plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
     plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-    figInfo=[]
+    figPath=[]
     for iFig in range(len(yLists)):
         subPlotCnt=len(yLists[iFig])
         fig, axs = plt.subplots(subPlotCnt,1,figsize=(8,10)) #figsize 12,8 makes it 1200x800 pixels
@@ -94,5 +94,8 @@ def genFigHHMM(df,xList,yLists,xLabel,yLabels):
         axs[0].set_ylabel('Temperature (C)')
         axs[1].set_ylabel('On/Off (1/0)')
         fig.tight_layout()
-        figInfo.append(fig)
-    return figInfo
+        figPath.append(filePath+'plot'+str(iFig+1)+'.jpg')
+        fig.savefig(figPath[iFig]) #to save to local folder 
+        #plt.cla() #clear axis of figure
+        plt.close(fig) #remove from plt memory (need to be done explicitly)
+    return figPath
