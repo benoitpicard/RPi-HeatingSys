@@ -66,7 +66,7 @@ try:
         WT_Data=['']* WT_Count
 
         # External Temp from weatherbit, free account (500 call/day)
-        attemptCount=1
+        attemptCount=2
         for attempt in range(attemptCount):
         
             try:
@@ -80,8 +80,8 @@ try:
                     elif type(WT_Ref) is list: #assume a list with 2 fields
                         WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
             except:
-                print('[%.19s] Error reading sensor %s (attempt#%d)' % 
-                    (pd.to_datetime('today'),TS1_ID[iS],attempt))
+                print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
+                    (pd.to_datetime('today'),attempt,attemptCount))
                 pass
 
  
