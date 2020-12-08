@@ -67,6 +67,7 @@ try:
 
         # External Temp from weatherbit, free account (500 call/day)
         attemptCount=2
+        dataValid=False
         for attempt in range(attemptCount):
         
             try:
@@ -79,6 +80,7 @@ try:
                         WT_Data[iW]=Weather['data'][0][WT_Ref[iW]]
                     elif type(WT_Ref) is list: #assume a list with 2 fields
                         WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
+                dataValid=True
             except:
                 print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
                     (pd.to_datetime('today'),attempt+1,attemptCount))
@@ -86,34 +88,34 @@ try:
                 
             time.sleep(10)
 
- 
-        #Write to CSV
-        #   if new start, overwrite file
-        #   else append last and check linecount, if too long, drop 1st line
-        
-        if reset_tempData:  
-            # Create Pandas DataFrame with header
-            temp_df=(pd.DataFrame([WT_Data],columns=WT_ColName)).set_index(WT_ColName[0])
-            temp_df.index = pd.to_datetime(temp_df.index)+ pd.Timedelta(hours=WT_TimeZoneOffset) #remove timezone delta
-            temp_df.to_csv(file_tempWeather,mode='w',header=True,index=True)
+        if dataValid:
+            #Write to CSV if new data not empty
+            #   if new start, overwrite file
+            #   else append last and check linecount, if too long, drop 1st line
             
-            reset_tempData=False
-        else:
-            # Read CSV as pandas DataFrame
-            read_df,errorActive=tryReadCSV(file_tempWeather,WT_ColName[0],pd)
-            if errorActive:
-                print('   --- abort loop ---')
-                break
-            newLine_df=(pd.DataFrame([WT_Data],columns=WT_ColName)).set_index(WT_ColName[0])
-            newLine_df.index = pd.to_datetime(newLine_df.index)+ pd.Timedelta(hours=WT_TimeZoneOffset) #remove timezone delta
-            temp_df=read_df.append(newLine_df,sort=False)
-            
-            # remove 1st line if too long
-            dfCount=len(temp_df.index)+1
-            if dfCount+1>file_maxLines:
-                temp_df=temp_df.drop(temp_df.index[[0]])
+            if reset_tempData:  
+                # Create Pandas DataFrame with header
+                temp_df=(pd.DataFrame([WT_Data],columns=WT_ColName)).set_index(WT_ColName[0])
+                temp_df.index = pd.to_datetime(temp_df.index)+ pd.Timedelta(hours=WT_TimeZoneOffset) #remove timezone delta
+                temp_df.to_csv(file_tempWeather,mode='w',header=True,index=True)
                 
-            temp_df.to_csv(file_tempWeather,mode='w',header=True,index=True)
+                reset_tempData=False
+            else:
+                # Read CSV as pandas DataFrame
+                read_df,errorActive=tryReadCSV(file_tempWeather,WT_ColName[0],pd)
+                if errorActive:
+                    print('   --- abort loop ---')
+                    break
+                newLine_df=(pd.DataFrame([WT_Data],columns=WT_ColName)).set_index(WT_ColName[0])
+                newLine_df.index = pd.to_datetime(newLine_df.index)+ pd.Timedelta(hours=WT_TimeZoneOffset) #remove timezone delta
+                temp_df=read_df.append(newLine_df,sort=False)
+                
+                # remove 1st line if too long
+                dfCount=len(temp_df.index)+1
+                if dfCount+1>file_maxLines:
+                    temp_df=temp_df.drop(temp_df.index[[0]])
+                    
+                temp_df.to_csv(file_tempWeather,mode='w',header=True,index=True)
             
         # Abort method: if valveCmd.csv contains the exitflag
         # Reading csv file with trials to avoid simulatneous reading errors
