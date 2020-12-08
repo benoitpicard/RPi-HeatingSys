@@ -81,8 +81,10 @@ try:
                         WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
             except:
                 print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
-                    (pd.to_datetime('today'),attempt,attemptCount))
+                    (pd.to_datetime('today'),attempt+1,attemptCount))
                 pass
+                
+            time.sleep(10)
 
  
         #Write to CSV
