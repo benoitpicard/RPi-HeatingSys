@@ -81,6 +81,7 @@ try:
                     elif type(WT_Ref) is list: #assume a list with 2 fields
                         WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
                 dataValid=True
+                break
             except:
                 print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
                     (pd.to_datetime('today'),attempt+1,attemptCount))
