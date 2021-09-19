@@ -7,7 +7,7 @@
 import time
 import numpy as np
 import pandas as pd
-from w1thermsensor import W1ThermSensor
+from w1thermsensor import W1ThermSensor, Sensor
 import board
 import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
 import psutil
@@ -38,7 +38,7 @@ TS1_Count=len(TS1_Name)
 # --- DS18B20 SETUP ---
 DS18B20_SENS=[]
 for iS in range(TS1_Count):
-    DS18B20_SENS.append(W1ThermSensor(W1ThermSensor.THERM_SENSOR_DS18B20, TS1_ID[iS]))
+    DS18B20_SENS.append(W1ThermSensor(Sensor.DS18B20, TS1_ID[iS]))
 
 # --- DHT SETUP --- 
 #   issue with PulseIn process being stuck after closing first iteration: 'kill' #https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/27
