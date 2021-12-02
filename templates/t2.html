@@ -1,0 +1,91 @@
+
+<html lang="en">
+<title>W3.CSS Template</title>
+<head>
+
+<meta charset="UTF-8">
+<!--<meta name="viewport" content="width=300, initial-scale=1">
+
+<style>
+@media screen and (min-width: 2000px) {}
+</style>
+
+<meta name="viewport" content="width=2000px, initial-scale=1">
+-->
+
+</head>
+<body>
+Hello World3456
+
+ <p id="demo"></p>
+ <p id="demo2"></p>
+ <p id="demo3"></p>
+ <p id="demo4"></p>
+ <p id="demo5"></p>
+<script>
+function getResolution() {
+	<!--
+	 
+	 var viewportwidth;
+	 var viewportheight;
+	  
+	 // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+	  
+	 if (typeof window.innerWidth != 'undefined')
+	 {
+		  viewportwidth = window.innerWidth,
+		  viewportheight = window.innerHeight
+	 }
+	  
+	// IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+	 
+	 else if (typeof document.documentElement != 'undefined'
+		 && typeof document.documentElement.clientWidth !=
+		 'undefined' && document.documentElement.clientWidth != 0)
+	 {
+		   viewportwidth = document.documentElement.clientWidth,
+		   viewportheight = document.documentElement.clientHeight
+	 }
+	  
+	 // older versions of IE
+	  
+	 else
+	 {
+		   viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
+		   viewportheight = document.getElementsByTagName('body')[0].clientHeight
+	 }
+//-->
+	document.getElementById("demo").innerHTML = "Your window.screen.width : " + window.screen.width ;
+	document.getElementById("demo2").innerHTML = "Your window.devicePixelRatio: " + window.devicePixelRatio;
+	document.getElementById("demo3").innerHTML = " window.screen.height: " + window.screen.height;
+	document.getElementById("demo4").innerHTML = "Your screen resolution is: " + window.screen.width * window.devicePixelRatio + "x" + window.screen.height * window.devicePixelRatio;
+	document.getElementById("demo5").innerHTML ='Your viewport width is '+viewportwidth+'x'+viewportheight;
+}
+</script>
+
+<script>
+function setResolution() {
+	window.resizeTo(1000,1000);
+	<!--
+	 
+
+	 // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+	  
+	 if (typeof window.innerWidth != 'undefined')
+	 {
+		  window.innerWidth=window.screen.width * window.devicePixelRatio
+		  //viewportheight = window.innerHeight
+	 }
+	  
+
+//-->
+}
+</script>
+
+
+<button type="button" onclick="getResolution();">Get Resolution</button>
+
+<button type="button" onclick="setResolution();">Set Resolution</button>
+
+</body>
+</html>

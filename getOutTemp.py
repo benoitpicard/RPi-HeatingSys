@@ -134,7 +134,7 @@ try:
         time.sleep(sleepMinutes*60)
 
 except:
-    #retry reading (sometime fails due to simulatneous file writing by getOutTemp.py)
+    #??
     print('[%.19s] getOutTemp.py: error in execution, exiting' % pd.to_datetime('today'))
     traceback.print_exc(file=sys.stdout)
                 

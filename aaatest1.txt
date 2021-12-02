@@ -1,0 +1,24 @@
+test#1jax#1--------
+----
+----
+----ajax sent:
+b'username=asdf&secret=shhh'ajax sent:
+b'username=asdf&secret=shhh'ajax sent:
+b'username=asdfasdfsadf&secret=shhh'
+----
+----
+----
+ajax sent:
+b'{"name":"John","age":30,"isAdmin":false,"courses":["html","css","js"],"wife":null}'
+----
+ajax sent:
+b'{"scname":"hello buddy","secret":"shhh"}'
+ajax sent:
+b'{"scname":"hello buddy aaa","secret":"shhh"}'
+ajax sent:
+b'{"scname":"hello buddy aaa","secret":"shhhasdfsda"}'
+----
+ajax sent:
+b'{"scname":"ff","secret":"shhh"}'
+ff
+shhh

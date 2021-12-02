@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/workaround.js"></script>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 43px;
-  bottom: 0;
-  height: inherit;
-}
-</style>
+<head>
+	<meta charset="UTF-8">
+	<title>RPi - Home Heating System</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">  <!--_black original, many color available!-->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	
+	<style>
+	html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+	.w3-sidebar {
+	  z-index: 3;
+	  width: 250px;
+	  top: 43px;
+	  bottom: 0;
+	  height: inherit;
+	}
+	.temp-controller {
+		width: 300px;
+		float:left;
+		border-style: solid;
+		margin:10px
+	}
+	.temp-button {
+		width: 30px;
+		height: 30px;
+	}
+	</style>
+</head>
 <body>
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
-    <a href="home.html" class="w3-bar-item w3-button w3-theme-l1">RPi-HeatingSys</a>
-    <a href="home.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
-    <a href="control.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Control</a>
-    <a href="data.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Data</a>
-    <a href="info.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Info</a>
+    <a href="home" class="w3-bar-item w3-button w3-theme-l1">RPi-HeatingSys</a>
+    <a href="home" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+    <a href="control" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Control</a>
+    <a href="data" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Data</a>
+    <a href="info" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Info</a>
   </div>
 </div>
 
@@ -38,69 +52,71 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <i class="fa fa-remove"></i>
   </a>
   <h4 class="w3-bar-item"><b>Menu</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">Link</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="home">Home</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="control">Control</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="data">Data</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="info">Info</a>
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<!-- START MAIN -->
+<!-- shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main" style="margin-left:250px">
 
-  <div class="w3-row w3-padding-64">
-    <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Heading</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-third w3-container">
-      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-    </div>
-  </div>
+	<div class="w3-row w3-padding-64">
+		<h2 style="padding-left:10px">Control Panel <button onclick="return refresh_all()">Refresh</button> </h2>
+	<div class="w3-container w3-border-theme temp-controller">
+	  
+	  <h3>Main Floor</h3>
+		<p>Heating Active: <b id='V2M'>???</b></p>
+		<p >Air Temperature: <b id='TA_M (C)'>???</b></p>
+		<p>Floor Temperature: <b id='TF_M (C)'>???</b></p>
+		<p>Air Setpoint (Prog): <b id='TA_M_TG (C)'>???</b></p>
+		<p>Air Setpoint (Hold): <b id='TA_M_HD (C)'>???</b></p>
+			<button class="temp-button">+</button>
+			<button class="temp-button">-</button>
+		<p>Duration to Hold: <b id='HD_M_Time'>???</b></p>
+			<button class="temp-button">++</button>
+			<button class="temp-button">+</button>
+			<button class="temp-button">-</button>
+			<button class="temp-button">--</button>
+		<p>Hold Active: <b id='HD_M_Act'>???</b></p>
+		<button id="HD_M_Activate" onclick="return testWritting()" style='margin-bottom:10px'>Hold Activate</button>
+		<button id="HD_M_Cancel" onclick="return testWritting()" style='margin-bottom:10px'>Hold Cancel</button>
 
-  <div class="w3-row">
-    <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Heading</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-third w3-container">
-      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-    </div>
-  </div>
+	</div>
+	<div class="w3-container w3-border-theme temp-controller">
+	  <h3>Upstairs</h3>
+		<p id='V1U'>Heating Active:</p>
+		<p id='TA_U (C)'>Air Temperature:</p>
+		<p id='TF_U (C)'>Floor Temperature:</p>
+		<p id='TA_U_TG (C)'>Air Setpoint (prog):</p>
+		<p id='TA_U_HD (C)'>Air Setpoint (hold):</p>
+		<p id='HD_U_Time'>Duration to Hold:</p>
+		<p id='HD_U_Act'>Hold Active:</p>
+		</div>
+	
+	<div class="w3-container w3-border-theme temp-controller">
+	  <h3>Garage</h3>
+		<p id='V3G'>Heating Active:</p>
+		<p id='TA_U (C)'>Air Temperature:</p>
+		<p id='TF_U (C)'>Floor Temperature:</p>
+		<p id='TA_U_TG (C)'>Air Setpoint (prog):</p>
+		<p id='TA_U_HD (C)'>Air Setpoint (hold):</p>
+		<p id='HD_U_Time'>Duration to Hold:</p>
+		<p id='HD_U_Act'>Hold Active:</p>
+		</div>
+	</div>	
+	
+	
 
-  <div class="w3-row w3-padding-64">
-    <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Heading</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
-        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-third w3-container">
-      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
-      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
-    </div>
-  </div>
 
-  <!-- Pagination -->
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a class="w3-button w3-black" href="#">1</a>
-      <a class="w3-button w3-hover-black" href="#">2</a>
-      <a class="w3-button w3-hover-black" href="#">3</a>
-      <a class="w3-button w3-hover-black" href="#">4</a>
-      <a class="w3-button w3-hover-black" href="#">5</a>
-      <a class="w3-button w3-hover-black" href="#">»</a>
-    </div>
-  </div>
-
+<!-- FOOTER -->	
   <footer id="myFooter">
     <div class="w3-container w3-theme-l2 w3-padding-32">
-      <h4>Footer</h4>
+      <h4>Heating System Control and Web App Design by Benoit Picard <a href="mailto:picard.benoit@gmail.com">picard.benoit@gmail.com</a></h4>
     </div>
 
     <div class="w3-container w3-theme-l1">
@@ -134,6 +150,90 @@ function w3_close() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
+</script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	   refresh_all()
+	}, false);
+
+	// HTTP request to send control information
+    function refresh_all()
+    {
+        var numberID = ["TA_M (C)", "TF_M (C)", "TA_M_TG (C)"];
+        var valveID = ["V2M","V1U","V3G"];
+		var statusPrint=["Off","On"]
+		
+		var req = new XMLHttpRequest()
+        req.onreadystatechange = function()
+        {
+            if (req.readyState == 4)
+            {
+                if (req.status != 200)
+                {
+                    //error handling code here
+                }
+                else
+                {
+                    var response = JSON.parse(req.responseText)
+					// fill value from data (2min refresh)
+					for (i = 0, len = numberID.length; i < len; i++) {
+						document.getElementById(numberID[i]).innerHTML = Math.round(response[numberID[i]]*10)/10;
+						}
+					for (i = 0, len = valveID.length; i < len; i++) {
+						document.getElementById(valveID[i]).innerHTML = statusPrint[response[valveID[i]]];
+					}
+                }
+            }
+        }
+    
+        req.open('POST', '/ctrl_refresh')
+        req.setRequestHeader("Content-type", "application/json")
+        //var postVars = {
+        //  TA_M: document.getElementById('TA_M').value,
+        //  secret: document.getElementById('secret').value
+        //};
+        req.send()
+        
+        return false
+    }
+	
+    function loadXMLDoc()
+    {
+        var req = new XMLHttpRequest()
+        req.onreadystatechange = function()
+        {
+            if (req.readyState == 4)
+            {
+                if (req.status != 200)
+                {
+                    //error handling code here
+                }
+                else
+                {
+                    var response = JSON.parse(req.responseText)
+                    document.getElementById('myDiv').innerHTML = response.username
+                }
+            }
+        }
+    
+        req.open('POST', '/ctrl_ajax')
+        req.setRequestHeader("Content-type", "application/json")
+        var un = document.getElementById('scname').value
+        var sec = document.getElementById('secret').value
+        var postVars = {
+          scname: document.getElementById('scname').value,
+          secret: document.getElementById('secret').value
+        };
+        req.send(JSON.stringify(postVars))
+//        var postVars = 'username='+un+'&secret='+sec
+//        req.send(postVars)
+        
+        return false
+    }
+	
+
+
 </script>
 
 </body>

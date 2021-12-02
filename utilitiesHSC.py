@@ -23,7 +23,7 @@ def getSetpointTemp(dfSetpoint,Zone,nowDateTime,typeDayRef,pd):
     # Return setpoint
     TA=dfSS.iloc[indexPS]['TA (C)']
     TF=dfSS.iloc[indexPS]['TF (C)']
-    return TA, TF
+    return [TA, TF]
 
 # Read CSV with pandas with try/except loop
 def tryReadCSV(file_name,index,pd,attemptCount=5,parseCol=''):

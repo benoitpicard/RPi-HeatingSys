@@ -1,7 +1,8 @@
 # Import main modules
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import pandas as pd
 import numpy as np
+import json
 
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -83,10 +84,39 @@ def data():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data.html',imgs=figPath,currentTime=timeStr)
 
-@app.route('/test')
-def test():
-    return render_template('t2.html')
+    
+@app.route('/control')
+def control():
+    return render_template('control.html')
 
+@app.route('/ctrl_refresh', methods = ['POST'])
+def ctrl_refresh():
+    # Get latest data:
+    nowDateTime=pd.to_datetime('today')
+    fileDay=nowDateTime.strftime('%Y%m%d')
+    file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
+    currentData=read_controlSys.iloc[-1]
+    json_exp=currentData.to_json(orient="index")
+        
+    return json_exp
+
+@app.route('/ajax', methods = ['POST'])
+def ajax_request():
+
+ 
+    file1 = open(r"aaatest1.txt","a+") 
+    file1.write('\najax sent:\n')
+    file1.write(str(request.data))
+    
+    data = json.loads(request.data)
+    file1.write('\n'+y['scname'])
+    file1.write('\n'+y['secret'])
+    file1.close() 
+
+    return '1'
+
+    
 @app.route('/<name>')
 def blank(name):
 
