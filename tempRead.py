@@ -16,8 +16,8 @@ import sys, traceback
 from utilitiesHSC import tryReadCSV
 
 # --- Initialisation ---
-file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
-file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
+file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
+file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 file_maxLines=100
 reset_tempData=True
 exitFlag=False

@@ -15,10 +15,10 @@ from utilitiesHSC import getSetpointTemp
 from utilitiesHSC import tryReadCSV
 
 # Initialization
-file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
-file_tempSetpoint="../RPi-HeatingSys-Data/tempSetpoint.csv"
-file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
-file_tempWeather="../RPi-HeatingSys-Data/dataTempWeather.csv"
+file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
+file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint.csv"
+file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
+file_tempWeather="/home/pi/RPi-HeatingSys-Data/dataTempWeather.csv"
 lastDateTime=pd.to_datetime('today')
 exitFlag=False
 

@@ -12,7 +12,7 @@ import pandas as pd
 from utilitiesHSC import tryReadCSV
 
 # --- Initialisation ---
-file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
+file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 
 # RELAY SETUP
 GPIO.setmode(GPIO.BOARD)

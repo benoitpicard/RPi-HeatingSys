@@ -12,12 +12,12 @@ from utilitiesHSC import genFigHHMM
 app = Flask(__name__)
 
 # Initialisation
-file_tempSensor="../RPi-HeatingSys-Data/dataTempSensor.csv"
-file_tempSetpoint="../RPi-HeatingSys-Data/tempSetpoint.csv"
-file_valveCmd="../RPi-HeatingSys-Data/valveCmd.csv"
+file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
+file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint.csv"
+file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 nowDateTime=pd.to_datetime('today')
 fileDay=nowDateTime.strftime('%Y%m%d')
-file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
 
 @app.route('/')
 def index():
@@ -25,7 +25,7 @@ def index():
     # Get latest data:
     nowDateTime=pd.to_datetime('today')
     fileDay=nowDateTime.strftime('%Y%m%d')
-    file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
     if errorActive:
         currentData=pd.DataFrame({'ERROR' : []}) #blank dataframe
@@ -45,7 +45,7 @@ def home():
     # Get latest data:
     nowDateTime=pd.to_datetime('today')
     fileDay=nowDateTime.strftime('%Y%m%d')
-    file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
     if errorActive:
         currentData=pd.DataFrame({'ERROR' : []}) #blank dataframe
@@ -66,7 +66,7 @@ def data():
     # Get latest data:
     nowDateTime=pd.to_datetime('today')
     fileDay=nowDateTime.strftime('%Y%m%d')
-    file_controlSys='../RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
     read_controlSys['TW_dT (C)']=read_controlSys['TW_IN (C)']-read_controlSys['TW_OUT (C)']
     read_controlSys['TW_dTon (C)']=read_controlSys['TW_dT (C)']
