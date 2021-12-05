@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from w1thermsensor import W1ThermSensor, Sensor
 import board
-import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
+# import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
 import psutil
 import sys, traceback
 # Import code functions
@@ -50,8 +50,8 @@ TS2_Name=['TA_UD','HA_UD','TA_MD','HA_MD']
 TS2_Unit=['C','%','C','%']
 TS2_Count=len(TS2_Name)
 DHT_SENS=[]
-DHT_SENS.append(adafruit_dht.DHT11(board.D12))
-DHT_SENS.append(adafruit_dht.DHT11(board.D16))
+# DHT_SENS.append(adafruit_dht.DHT11(board.D12))
+# DHT_SENS.append(adafruit_dht.DHT11(board.D16))
 
 print('[%.19s] tempRead.py: Setup completed, starting measurement' % pd.to_datetime('today'))
 # --- INFINITE LOOP ---
