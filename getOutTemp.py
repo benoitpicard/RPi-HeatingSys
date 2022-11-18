@@ -58,36 +58,36 @@ print('[%.19s] getOutTemp.py: Setup completed, starting weather reporting' % pd.
 try:
     while True:
 
-        # Run first, then every 20min:
+        # Run first, then every 10min:
         time.sleep(0.1)
-        sleepMinutes=20
+        sleepMinutes=10
         
         # Init to NaN
         WT_Data=['']* WT_Count
 
         # External Temp from weatherbit, free account (500 call/day)
-        attemptCount=2
+        attemptCount=3
         dataValid=False
-        #for attempt in range(attemptCount):
-        #
-        #    try:
-        # Get data from Weatherbit
-        Data = requests.get(queryLatLon)
-        Weather = Data.json()
+        for attempt in range(attemptCount):
         
-        for iW in range(WT_Count):
-            if type(WT_Ref[iW]) is str:
-                WT_Data[iW]=Weather['data'][0][WT_Ref[iW]]
-            elif type(WT_Ref) is list: #assume a list with 2 fields
-                WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
-        dataValid=True
-        #        break
-        #    except:
-        #        print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
-        #            (pd.to_datetime('today'),attempt+1,attemptCount))
-        #        pass
+            try:
+                # Get data from Weatherbit
+                Data = requests.get(queryLatLon)
+                Weather = Data.json()
                 
-        #    time.sleep(10)
+                for iW in range(WT_Count):
+                    if type(WT_Ref[iW]) is str:
+                        WT_Data[iW]=Weather['data'][0][WT_Ref[iW]]
+                    elif type(WT_Ref) is list: #assume a list with 2 fields
+                        WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
+                dataValid=True
+                break
+            except:
+                print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
+                    (pd.to_datetime('today'),attempt+1,attemptCount))
+                pass
+                
+            time.sleep(10) # retry in 10 seconds
 
         if dataValid:
             #Write to CSV if new data not empty
