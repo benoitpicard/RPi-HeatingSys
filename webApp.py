@@ -18,7 +18,7 @@ file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 nowDateTime=pd.to_datetime('today')
 fileDay=nowDateTime.strftime('%Y%m%d')
 file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
-file_figLocation='/home/pi/RPi-HeatingSys/static/'
+file_figLocation='./static/'
 
 @app.route('/')
 def index():
