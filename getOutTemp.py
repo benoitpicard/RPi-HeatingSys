@@ -68,26 +68,26 @@ try:
         # External Temp from weatherbit, free account (500 call/day)
         attemptCount=2
         dataValid=False
-        for attempt in range(attemptCount):
+        #for attempt in range(attemptCount):
+        #
+        #    try:
+        # Get data from Weatherbit
+        Data = requests.get(queryLatLon)
+        Weather = Data.json()
         
-            try:
-                # Get data from Weatherbit
-                Data = requests.get(queryLatLon)
-                Weather = Data.json()
+        for iW in range(WT_Count):
+            if type(WT_Ref[iW]) is str:
+                WT_Data[iW]=Weather['data'][0][WT_Ref[iW]]
+            elif type(WT_Ref) is list: #assume a list with 2 fields
+                WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
+        dataValid=True
+        #        break
+        #    except:
+        #        print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
+        #            (pd.to_datetime('today'),attempt+1,attemptCount))
+        #        pass
                 
-                for iW in range(WT_Count):
-                    if type(WT_Ref[iW]) is str:
-                        WT_Data[iW]=Weather['data'][0][WT_Ref[iW]]
-                    elif type(WT_Ref) is list: #assume a list with 2 fields
-                        WT_Data[iW]=Weather['data'][0][WT_Ref[iW][0]][WT_Ref[iW][1]]
-                dataValid=True
-                break
-            except:
-                print('[%.19s] Error getting weather data (attempt#%d/%d)' % 
-                    (pd.to_datetime('today'),attempt+1,attemptCount))
-                pass
-                
-            time.sleep(10)
+        #    time.sleep(10)
 
         if dataValid:
             #Write to CSV if new data not empty
