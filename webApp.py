@@ -18,6 +18,7 @@ file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 nowDateTime=pd.to_datetime('today')
 fileDay=nowDateTime.strftime('%Y%m%d')
 file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+file_figLocation='/home/pi/RPi-HeatingSys/static/'
 
 @app.route('/')
 def index():
@@ -78,7 +79,7 @@ def data():
     yLists=[[['TA_M (C)','TF_M (C)','TA_M_TG (C)'],['V2M']], 
             [['TA_U (C)','TF_U (C)','TA_U_TG (C)'],['V1U']],
             [['TW_IN (C)','TW_OUT (C)'],['TW_dT (C)','TW_dTon (C)']]]
-    figPath=genFigHHMM(read_controlSys,xList,yLists,'','','./static/')
+    figPath=genFigHHMM(read_controlSys,xList,yLists,'','',file_figLocation)
    
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data.html',imgs=figPath,currentTime=timeStr)
