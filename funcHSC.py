@@ -97,7 +97,7 @@ try:
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
                 # add control for main floor convectair Eco Mode
-                if iZ==2:
+                if valveName[iZ]=='V2M':
                     new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN OFF AT NIGHT
         else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
