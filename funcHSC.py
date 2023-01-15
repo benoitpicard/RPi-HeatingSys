@@ -23,9 +23,9 @@ lastDateTime=pd.to_datetime('today')
 exitFlag=False
 
 # Setup
-typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd']
-typeZone=['Upstair','Main']
-valveName=['V1U','V2M']
+typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd'] #[Monday,Tuesday,Wednesday,Thrusday,Friday,Saturday,Sunday
+typeZone=['Upstair','Main','Garage']
+valveName=['V1U','V2M','V3G']
 
 print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
 
