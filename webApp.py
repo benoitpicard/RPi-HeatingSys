@@ -87,7 +87,7 @@ def data():
     return render_template('data.html',imgs=figPath,currentTime=timeStr)
 
 @app.route('/dataYesterday')
-def data():
+def data_ys():
 
     # Get latest data:
     nowDateTime=pd.to_datetime('today')-timedelta(days=1)
