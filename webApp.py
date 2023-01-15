@@ -76,7 +76,7 @@ def data():
                         (read_controlSys['V2M']==0) & 
                         (read_controlSys['V3G']==0),'TW_dTon (C)']=np.nan
                         
-    xList=['DateTime','DateTime','DateTime']
+    xList=['DateTime','DateTime','DateTime','DateTime']
     yLists=[[['TA_M (C)','TF_M (C)','TA_M_TG (C)'],['V2M']], 
             [['TA_U (C)','TF_U (C)','TA_U_TG (C)'],['V1U']],
             [['TA_G (C)','TF_G (C)','TA_G_TG (C)'],['V3G']],

@@ -37,7 +37,7 @@ def tryReadCSV(file_name,index,pd,attemptCount=5,parseCol=''):
             break
         except:
             #retry reading (sometime fails due to simulatneous read/write callback)
-            print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
+            print('[%.19s] %s: error reading file' + file_name + '(attempt#%d)' % 
                 (pd.to_datetime('today'),sys.argv[0],attempt))
             traceback.print_exc(file=sys.stdout)
             if attempt<attemptCount-1:
