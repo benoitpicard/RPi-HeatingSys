@@ -37,9 +37,10 @@ def tryReadCSV(file_name,index,pd,attemptCount=5,parseCol=''):
             break
         except:
             #retry reading (sometime fails due to simulatneous read/write callback)
-            print('[%.19s] %s: error reading file' + file_name + '(attempt#%d)' % 
-                (pd.to_datetime('today'),sys.argv[0],attempt))
-            traceback.print_exc(file=sys.stdout)
+            try 
+                print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0],
+                    file_name, '(attempt#%d)' % attempt)
+                traceback.print_exc(file=sys.stdout)
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
@@ -59,9 +60,10 @@ def tryReadCSV_p(file_name,index,pd,attemptCount=5,parseCol=''):
             break
         except:
             #retry reading (sometime fails due to simulatneous read/write callback)
-            print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
-                (pd.to_datetime('today'),sys.argv[0],attempt))
-            traceback.print_exc(file=sys.stdout)
+            try
+                print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0],
+                    file_name, '(attempt#%d)' % attempt)
+                traceback.print_exc(file=sys.stdout)
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
