@@ -11,7 +11,7 @@ from utilitiesHSC import genFigHHMM
 
 # Web server application 
 app = Flask(__name__)
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 10
 
 # Initialisation
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
@@ -121,4 +121,12 @@ def blank(name):
     return render_template('blank.html',name=name)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', use_reloader=False)
+    app.run(debug=True, host='0.0.0.0', use_reloader=False) 
+
+# No cacheing at all for API endpoints.
+@app.after_request
+def add_header(response):
+    # response.cache_control.no_store = True
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store, max-age=10'
+    return response
