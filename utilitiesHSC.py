@@ -41,6 +41,8 @@ def tryReadCSV(file_name,index,pd,attemptCount=5,parseCol=''):
                 print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0]),
                     file_name, '(attempt#%d)' % attempt)
                 traceback.print_exc(file=sys.stdout)
+            except:
+                print('error handling error...#1')
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
@@ -64,6 +66,8 @@ def tryReadCSV_p(file_name,index,pd,attemptCount=5,parseCol=''):
                 print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0]),
                     file_name, '(attempt#%d)' % attempt)
                 traceback.print_exc(file=sys.stdout)
+            except:
+                print('error handling error...#2')
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
