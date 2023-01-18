@@ -109,7 +109,7 @@ def data_ys():
     figPath=genFigHHMM(read_controlSys,xList,yLists,'','',file_figLocation)
    
     timeStr=nowDateTime.strftime('%H:%M:%S')
-    return render_template('data.html',imgs=figPath,currentTime=timeStr)
+    return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
 @app.route('/test')
 def test():
