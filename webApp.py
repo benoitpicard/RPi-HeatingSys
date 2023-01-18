@@ -11,6 +11,7 @@ from utilitiesHSC import genFigHHMM
 
 # Web server application 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 # Initialisation
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
