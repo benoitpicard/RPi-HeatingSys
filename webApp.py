@@ -111,7 +111,35 @@ def data_ys():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
+@app.route('/status')
+def status_JSON():
     # Prepare JSON response
+    #{
+    #    "targetHeatingCoolingState": INT_VALUE,
+    #    "targetTemperature": FLOAT_VALUE,
+    #    "currentHeatingCoolingState": INT_VALUE,
+    #    "currentTemperature": FLOAT_VALUE
+    #}
+    a={
+        "targetHeatingCoolingState": 1,
+        "targetTemperature": 15,
+        "currentHeatingCoolingState": 2,
+        "currentTemperature": 12
+    }
+    return a
+    
+@app.route('/targetHeatingCoolingState')
+def controlMode_update():
+    #Modify temperature control mode
+    a='Hello World'
+    return a
+    
+@app.route('/targetTemperature', methods=['GET', 'POST'])
+def controlTempUpdate():
+    #Modify temperature setpoint
+    data = request.get_data()
+    return data
+
 @app.route('/test')
 def test():
     return render_template('t2.html')
