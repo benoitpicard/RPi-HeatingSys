@@ -111,6 +111,7 @@ def data_ys():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
+    # Prepare JSON response
 @app.route('/test')
 def test():
     return render_template('t2.html')
