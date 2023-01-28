@@ -1,5 +1,5 @@
 # Import main modules
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
 from datetime import date, timedelta
@@ -113,26 +113,26 @@ def data_ys():
 
 @app.route('/status')
 def status_JSON():
-    # Prepare JSON response
+    # Prepare JSON response. Format:
     #{
     #    "targetHeatingCoolingState": INT_VALUE,
     #    "targetTemperature": FLOAT_VALUE,
     #    "currentHeatingCoolingState": INT_VALUE,
     #    "currentTemperature": FLOAT_VALUE
     #}
-    a={
+    data={
         "targetHeatingCoolingState": 1,
         "targetTemperature": 15,
         "currentHeatingCoolingState": 2,
         "currentTemperature": 12
     }
-    return a
+    return jsonify(data)
     
 @app.route('/targetHeatingCoolingState')
 def controlMode_update():
     #Modify temperature control mode
-    a='Hello World'
-    return a
+    data='Hello World'
+    return data
     
 @app.route('/targetTemperature', methods=['GET', 'POST'])
 def controlTempUpdate():
