@@ -123,7 +123,7 @@ def status_JSON():
     data={
         "targetHeatingCoolingState": 1,
         "targetTemperature": 15,
-        "currentHeatingCoolingState": 2,
+        "currentHeatingCooli    ngState": 2,
         "currentTemperature": 12
     }
     return jsonify(data)
@@ -131,13 +131,13 @@ def status_JSON():
 @app.route('/targetHeatingCoolingState')
 def controlMode_update():
     #Modify temperature control mode
-    data='Hello World'
+    data=request.args.get('value')
     return data
     
-@app.route('/targetTemperature', methods=['GET', 'POST'])
+@app.route('/targetTemperature')
 def controlTempUpdate():
     #Modify temperature setpoint
-    data = request.get_data()
+    data = data=request.args.get('value')
     return data
 
 @app.route('/test')

@@ -54,7 +54,7 @@ try:
         read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
         read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
-        # --- Import control setpoint ---
+        # --- Import AUTO/Default setpoint from csv schedule ---
         # Reading csv file with trials to avoid simulatneous reading errors
         read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'',pd)
         if errorActive:
@@ -72,6 +72,28 @@ try:
             DataList=DataList+targetTemp[Zone]  
         # Assign Target to Pandas Serie
         temp_Target=pd.Series(DataList,NameList)
+        
+        # --- Mode Selection ---
+        # Mode selection to match HomeKit toolkit:
+        #   Each zone have 2 (Air & Floor)
+        #       for air temperature:
+        #           0 (OFF) : Away Mode, Set air target to 16
+        #           1 (HEAT): Manual Mode, Set to entered value (add schedule?)
+        #           3 (AUTO): Default to CSV schedule (maybe need to save it in the future?)
+        #       for floor temperature:
+        #           0 (OFF) : Water flow for sector is OFF
+        #           1 (HEAT): Manual Mode, Set to ON for 1 hour
+        #           3 (AUTO): Water flow for sector is ON (setpoint not used)
+        
+        # Minimal implementation as of jan 2023: manual mode not yet implemented
+        NameList=[]
+        DataList=()
+        for Zone in typeZone:
+            # Prepare Data for a Pandas Serie
+            NameList=NameList+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
+            DataList=DataList+[3 1]
+        # Assign Mode to Pandas Serie
+        temp_Mode=pd.Series(DataList,NameList)
         
         # --- Control logic ---
         # Reading csv file with trials to avoid simulatneous reading errors
@@ -93,6 +115,8 @@ try:
                 TA_Cmd=targetTemp[Zone][0]
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
+                # Correct Floor temp mode
+                
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
