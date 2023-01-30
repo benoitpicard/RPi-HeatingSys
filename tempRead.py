@@ -9,8 +9,6 @@ import numpy as np
 import pandas as pd
 from w1thermsensor import W1ThermSensor, Sensor
 import board
-# import adafruit_dht # source: https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/python-setup
-import psutil
 import sys, traceback
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -24,12 +22,14 @@ exitFlag=False
 
 # --- SENSOR LIST (DS18B20) ---
 # RPi pin no default in used (GPIO4) for 1-wire protocol
-TS1_Name=['TA_U','TF_U','TA_M','TF_M','TW_IN','TW_OUT']
-TS1_Unit=['C','C','C','C','C','C']
+TS1_Name=['TA_U','TF_U','TA_M','TF_M','TA_G','TF_G','TW_IN','TW_OUT']
+TS1_Unit=['C','C','C','C','C','C','C','C']
 TS1_ID=['01144bf1efaa', #'TA_U'
     '01145167b9aa', #'TF_U'
     '000005675be3', #'TA_M'
     '01144b8b70aa', #'TF_M'
+    '48e13793adff', #'TA_G'
+    '54e1379c71ff',  #'TF_G'
     '0114515ff8aa', #'TW_IN'
     '0114515740aa'  #'TW_OUT'
     ]
@@ -40,18 +40,7 @@ DS18B20_SENS=[]
 for iS in range(TS1_Count):
     DS18B20_SENS.append(W1ThermSensor(Sensor.DS18B20, TS1_ID[iS]))
 
-# --- DHT SETUP --- 
-#   issue with PulseIn process being stuck after closing first iteration: 'kill' #https://github.com/adafruit/Adafruit_CircuitPython_DHT/issues/27
-for proc in psutil.process_iter():
-    if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
-        proc.kill()
-#   setup name
-TS2_Name=['TA_UD','HA_UD','TA_MD','HA_MD']
-TS2_Unit=['C','%','C','%']
-TS2_Count=len(TS2_Name)
-DHT_SENS=[]
-# DHT_SENS.append(adafruit_dht.DHT11(board.D12))
-# DHT_SENS.append(adafruit_dht.DHT11(board.D16))
+# --- DHT SETUP --- REMOVED AS OF JAN01 2023 --- SEE GITHUB COMMIT FOR PREVIOUS CODE
 
 print('[%.19s] tempRead.py: Setup completed, starting measurement' % pd.to_datetime('today'))
 # --- INFINITE LOOP ---
@@ -64,8 +53,6 @@ try:
         # Init to NaN
         TS1_Data=np.empty(TS1_Count)
         TS1_Data[:]=np.nan
-        TS2_Data=np.empty(TS2_Count)
-        TS2_Data[:]=np.nan
         
         # DS18B20 SENSOR READ
         attemptCount=5
@@ -84,26 +71,14 @@ try:
                 time.sleep(0.5)
             time.sleep(2)
                 
-        # DHT SENSOR READ
-        #for iS in range(TS2_Count):
-        #    for attempt in range(10):
-        #        try:
-        #            TS2_Data[iS*2]=DHT_SENS[iS].temperature
-        #            TS2_Data[iS*2+1]=DHT_SENS[iS].humidity
-        #            break
-        #        except:
-        #            pass
-        #        time.sleep(0.5)
-        #    time.sleep(0.1)
-        
         # GROUP DATA WITH DATE
-        TS_Name=['DateTime']+TS1_Name+TS2_Name
-        TS_Unit=['']+TS1_Unit+TS2_Unit
+        TS_Name=['DateTime']+TS1_Name
+        TS_Unit=['']+TS1_Unit
         TS_ColName=[]
         for iN in range(len(TS_Name)):
             TS_ColName.append(TS_Name[iN]+' ('+ TS_Unit[iN]+')')
             
-        TS_Data=[np.concatenate(([pd.to_datetime('today')],TS1_Data,TS2_Data))]
+        TS_Data=[np.concatenate(([pd.to_datetime('today')],TS1_Data))]
         
         #Write to CSV
         #   if new start, overwrite file

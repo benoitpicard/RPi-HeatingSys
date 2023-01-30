@@ -58,15 +58,15 @@ print('[%.19s] getOutTemp.py: Setup completed, starting weather reporting' % pd.
 try:
     while True:
 
-        # Run first, then every 20min:
+        # Run first, then every 10min:
         time.sleep(0.1)
-        sleepMinutes=20
+        sleepMinutes=10
         
         # Init to NaN
         WT_Data=['']* WT_Count
 
         # External Temp from weatherbit, free account (500 call/day)
-        attemptCount=2
+        attemptCount=3
         dataValid=False
         for attempt in range(attemptCount):
         
@@ -87,7 +87,7 @@ try:
                     (pd.to_datetime('today'),attempt+1,attemptCount))
                 pass
                 
-            time.sleep(10)
+            time.sleep(10) # retry in 10 seconds
 
         if dataValid:
             #Write to CSV if new data not empty

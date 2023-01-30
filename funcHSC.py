@@ -23,9 +23,9 @@ lastDateTime=pd.to_datetime('today')
 exitFlag=False
 
 # Setup
-typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd']
-typeZone=['Upstair','Main']
-valveName=['V1U','V2M']
+typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd'] #[Monday,Tuesday,Wednesday,Thrusday,Friday,Saturday,Sunday
+typeZone=['Upstair','Main','Garage']
+valveName=['V1U','V2M','V3G']
 
 print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
 
@@ -96,6 +96,9 @@ try:
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
+                # add control for main floor convectair Eco Mode
+                if valveName[iZ]=='V2M':
+                    new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN OFF AT NIGHT
         else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
         

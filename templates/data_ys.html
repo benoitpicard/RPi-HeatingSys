@@ -8,8 +8,14 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">  <!--_black original, many color available!-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+	
+	<!-- icon ref https://stackoverflow.com/questions/13049636/adding-apple-icon-to-website-->
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.ico') }}"><!-- iPhone 57 px-->
+	<link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='favicon.ico') }}"><!-- iPad 72 px-->
+	<link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='favicon.ico') }}"><!-- iPhone4 114ps -->
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"><!-- Opera Speed Dial, at least 144×114 px -->
+	<!-- end icon ref -->
 	
 	<style>
 	html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
@@ -59,9 +65,14 @@
 	
 	<div class="w3-row w3-padding-64">
 	<div class="w3-container">
-	  <h2>Latest Records</h2>
-	  <p>Latest sensor and controller status (current time: {{currentTime}})</p>
-		{{tableHTML_1|safe}}
+	  <h2>Yesterday's data</h2>
+	  <p>Temperature for upstairs (U), main (M), garage (G) zones and heated water temperature</p>
+	  <p>Current time: {{currentTime}}</p>
+	  
+		{% for img_path in imgs %}
+			<img src="{{img_path|safe}}" alt="Image not loading..."/>
+		{% endfor %}
+		
 	</div>
 	</div>	
 	

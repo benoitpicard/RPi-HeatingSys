@@ -37,9 +37,12 @@ def tryReadCSV(file_name,index,pd,attemptCount=5,parseCol=''):
             break
         except:
             #retry reading (sometime fails due to simulatneous read/write callback)
-            print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
-                (pd.to_datetime('today'),sys.argv[0],attempt))
-            traceback.print_exc(file=sys.stdout)
+            try:
+                print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0]),
+                    file_name, '(attempt#%d)' % attempt)
+                traceback.print_exc(file=sys.stdout)
+            except:
+                print('error handling error...#1')
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
@@ -59,9 +62,12 @@ def tryReadCSV_p(file_name,index,pd,attemptCount=5,parseCol=''):
             break
         except:
             #retry reading (sometime fails due to simulatneous read/write callback)
-            print('[%.19s] %s: error reading file_tempSensor (attempt#%d)' % 
-                (pd.to_datetime('today'),sys.argv[0],attempt))
-            traceback.print_exc(file=sys.stdout)
+            try:
+                print('[%.19s] %s: error reading file' % (pd.to_datetime('today'),sys.argv[0]),
+                    file_name, '(attempt#%d)' % attempt)
+                traceback.print_exc(file=sys.stdout)
+            except:
+                print('error handling error...#2')
             if attempt<attemptCount-1:
                 print('   --- continuing ---')
             errorActive=True
@@ -82,6 +88,7 @@ def genFigHHMM(df,xList,yLists,xLabel,yLabels,filePath):
     plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
     figPath=[]
+    figPathSave=[]
     for iFig in range(len(yLists)):
         subPlotCnt=len(yLists[iFig])
         fig, axs = plt.subplots(subPlotCnt,1,figsize=(8,10)) #figsize 12,8 makes it 1200x800 pixels
@@ -95,7 +102,8 @@ def genFigHHMM(df,xList,yLists,xLabel,yLabels,filePath):
         axs[1].set_ylabel('On/Off (1/0)')
         fig.tight_layout()
         figPath.append(filePath+'plot'+str(iFig+1)+'.jpg')
-        fig.savefig(figPath[iFig]) #to save to local folder 
+        figPathSave.append('/home/pi/RPi-HeatingSys/static/'+'plot'+str(iFig+1)+'.jpg')
+        fig.savefig(figPathSave[iFig]) #to save to local folder 
         #plt.cla() #clear axis of figure
         plt.close(fig) #remove from plt memory (need to be done explicitly)
     return figPath
