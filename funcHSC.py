@@ -91,7 +91,7 @@ try:
         for Zone in typeZone:
             # Prepare Data for a Pandas Serie
             NameList=NameList+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
-            DataList=DataList+[3 1]
+            DataList=DataList+(3,0)
         # Assign Mode to Pandas Serie
         temp_Mode=pd.Series(DataList,NameList)
         
@@ -115,8 +115,9 @@ try:
                 TA_Cmd=targetTemp[Zone][0]
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
-                # Correct Floor temp mode
-                
+                # Correct Floor temp mode to AUTO if Valve Command is ON
+                if ValveCmd:
+                    temp_Mode['TF_'+Zone[0]+'_MODE']=3
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
