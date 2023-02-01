@@ -24,6 +24,17 @@ fileDay=nowDateTime.strftime('%Y%m%d')
 file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
 file_figLocation='./static/'
 
+# JSON Encoder
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
+
 @app.route('/')
 def index():
 
@@ -133,7 +144,7 @@ def status_JSON(id):
         "currentHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
         "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
     }
-    return json.dumps(data)
+    return json.dumps(data, cls=NpEncoder)
     
 @app.route('/<id>/targetHeatingCoolingState')
 def controlModeUpdate(id):
