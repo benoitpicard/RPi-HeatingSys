@@ -111,7 +111,7 @@ def data_ys():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
-@app.route('/status')
+@app.route('/<id>/status')
 def status_JSON():
     # Prepare JSON response. Format:
     #{
@@ -120,21 +120,26 @@ def status_JSON():
     #    "currentHeatingCoolingState": INT_VALUE,
     #    "currentTemperature": FLOAT_VALUE
     #}
-    data={
-        "targetHeatingCoolingState": 1,
-        "targetTemperature": 15,
-        "currentHeatingCooli    ngState": 2,
-        "currentTemperature": 12
+    # Get latest data:
+    nowDateTime=pd.to_datetime('today')
+    fileDay=nowDateTime.strftime('%Y%m%d')
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
+    data={ # return data from last entry in csv file
+        "targetHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "targetTemperature": read_controlSys[id+'_TG (C)'].iloc[-1],
+        "currentHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
     }
     return jsonify(data)
     
-@app.route('/targetHeatingCoolingState')
+@app.route('/<id>/targetHeatingCoolingState')
 def controlMode_update():
     #Modify temperature control mode
     data=request.args.get('value')
     return data
     
-@app.route('/targetTemperature')
+@app.route('/<id>/targetTemperature')
 def controlTempUpdate():
     #Modify temperature setpoint
     data = data=request.args.get('value')
