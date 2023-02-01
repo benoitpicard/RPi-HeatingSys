@@ -129,7 +129,7 @@ try:
         
         # --- Save data to recording file ---
         # Combine data
-        dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0],read_tempWeather.iloc[-1]])
+        dataAll=pd.concat([temp_Meas,temp_Mode,temp_Target,,new_valveCmd.iloc[0],read_tempWeather.iloc[-1]])
         dataAll=dataAll.to_frame().T.set_index('DateTime')
         # Save to file - Check Date and reset for new filename each day (or if file not found)
         fileDay=nowDateTime.strftime('%Y%m%d')
