@@ -1,8 +1,10 @@
 # Import main modules
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
+import json
 import pandas as pd
 import numpy as np
 from datetime import date, timedelta
+
 
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -131,7 +133,7 @@ def status_JSON(id):
         "currentHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
         "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
     }
-    return jsonify(data)
+    return json.dumps(data)
     
 @app.route('/<id>/targetHeatingCoolingState')
 def controlModeUpdate(id):
