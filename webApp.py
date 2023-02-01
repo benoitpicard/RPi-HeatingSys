@@ -112,7 +112,7 @@ def data_ys():
     return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
 @app.route('/<id>/status')
-def status_JSON():
+def status_JSON(id):
     # Prepare JSON response. Format:
     #{
     #    "targetHeatingCoolingState": INT_VALUE,
@@ -134,13 +134,13 @@ def status_JSON():
     return jsonify(data)
     
 @app.route('/<id>/targetHeatingCoolingState')
-def controlMode_update():
+def controlModeUpdate(id):
     #Modify temperature control mode
     data=request.args.get('value')
     return data
     
 @app.route('/<id>/targetTemperature')
-def controlTempUpdate():
+def controlTempUpdate(id):
     #Modify temperature setpoint
     data = data=request.args.get('value')
     return data
