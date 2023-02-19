@@ -85,11 +85,11 @@ try:
             DataList=DataList+targetTemp[Zone]  
         # Assign Target to Pandas Serie
         temp_Target=pd.Series(DataList,NameList)
-        # Debug
-        print(nowDateTime)
-        print(dfMT.to_string())
-        print(Mode)
-        print(temp_Target.to_string())
+        # Debug - Debuging mode to be implemented!
+        #print(nowDateTime)
+        #print(dfMT.to_string())
+        #print(Mode)
+        #print(temp_Target.to_string())
 
         # --- Mode Selection ---
         # Mode selection to match HomeKit toolkit:
