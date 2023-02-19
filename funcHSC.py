@@ -12,7 +12,7 @@ import pandas as pd
 import os, sys, traceback
 # Import code functions
 from utilitiesHSC import getSetpointTemp
-from utilitiesHSC import tryReadCSV
+from utilitiesHSC import tryReadCSV, tryReadCSV_p
 
 # Initialization
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
