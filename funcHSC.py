@@ -67,7 +67,7 @@ try:
         else: #assume no entry or all future value
             Mode='Schedule'
             
-        # --- Import AUTO/Default setpoint from csv schedule ---
+        # --- Import Setpoint from csv schedule based on select mode ---
         # Reading csv file with trials to avoid simulatneous reading errors
         read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
         if errorActive:
@@ -85,7 +85,12 @@ try:
             DataList=DataList+targetTemp[Zone]  
         # Assign Target to Pandas Serie
         temp_Target=pd.Series(DataList,NameList)
-        
+        # Debug
+        print(nowDateTime)
+        print(dfSS.to_string())
+        print(Mode)
+        print(temp_Target.to_string())
+
         # --- Mode Selection ---
         # Mode selection to match HomeKit toolkit:
         #   Each zone have 2 (Air & Floor)
