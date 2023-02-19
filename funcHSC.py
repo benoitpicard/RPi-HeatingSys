@@ -151,7 +151,7 @@ try:
             # If file does not exist
             dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
         else:
-            # Append to file
+            # Append to file - would need to run a try loop, in case csv file is currently read by webapp
             dataAll.to_csv(file_controlSys,mode='a',header=False,index=True)
         
         # --- Save to relay csv ---
