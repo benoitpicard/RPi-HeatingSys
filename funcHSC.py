@@ -16,7 +16,8 @@ from utilitiesHSC import tryReadCSV
 
 # Initialization
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
-file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint.csv"
+file_modeSelect="/home/pi/RPi-HeatingSys-Data/tempSetpointModeSelect.csv"
+file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint_" #need to add Mode + ".csv"
 file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 file_tempWeather="/home/pi/RPi-HeatingSys-Data/dataTempWeather.csv"
 lastDateTime=pd.to_datetime('today')
@@ -54,9 +55,21 @@ try:
         read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
         read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
+        # --- Import Setpoint Mode Type from csv input ---
+        # Reading csv file with trials to avoid simulatneous reading errors
+        read_modeSelect,errorActive=tryReadCSV(file_modeSelect,'',pd)
+        if errorActive:
+            print('   --- abort loop ---')
+            break
+        dfMT=(nowDateTime-read_modeSelect['DateTime'])>pd.to_timedelta(0) #compare DateTime with current time and return if above 0
+        if any(dfMT==True):
+            Mode=read_modeSelect.iloc[(dfMT[dfMT==True].index.tolist()[-1])]['Mode'] # return Mode column of last true value
+        else: #assume no entry or all future value
+            Mode='Schedule'
+            
         # --- Import AUTO/Default setpoint from csv schedule ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'',pd)
+        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
         if errorActive:
             print('   --- abort loop ---')
             break
