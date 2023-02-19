@@ -57,7 +57,7 @@ try:
         
         # --- Import Setpoint Mode Type from csv input ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_modeSelect,errorActive=tryReadCSV(file_modeSelect,'',pd)
+        read_modeSelect,errorActive=tryReadCSV_p(file_modeSelect,'',pd,5,'DateTime')
         if errorActive:
             print('   --- abort loop ---')
             break
