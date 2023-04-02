@@ -31,7 +31,7 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     '48e13793adff', #'TA_G'
     '54e1379c71ff',  #'TF_G'
     '0114515ff8aa', #'TW_IN'
-    '0114515740aa'  #'TW_OUT'
+    '0114515740aa',  #'TW_OUT'
     'e3e1379c0cff'  #'TA_OUT'
     ]
 TS1_Count=len(TS1_Name)
