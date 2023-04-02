@@ -94,7 +94,7 @@ def data():
     yLists=[[['TA_M (C)','TF_M (C)','TA_M_TG (C)'],['V2M']], 
             [['TA_U (C)','TF_U (C)','TA_U_TG (C)'],['V1U']],
             [['TA_G (C)','TF_G (C)','TA_G_TG (C)'],['V3G']],
-            [['TA_OUT (C)']],
+            [['TA_OUT (C)','WT_OUT (C)'],['V2M']],
             [['TW_IN (C)','TW_OUT (C)'],['TW_dT (C)','TW_dTon (C)']]]
     figPath=genFigHHMM(read_controlSys,xList,yLists,'','',file_figLocation)
    
