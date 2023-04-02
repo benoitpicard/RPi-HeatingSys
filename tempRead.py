@@ -22,8 +22,8 @@ exitFlag=False
 
 # --- SENSOR LIST (DS18B20) ---
 # RPi pin no default in used (GPIO4) for 1-wire protocol
-TS1_Name=['TA_U','TF_U','TA_M','TF_M','TA_G','TF_G','TW_IN','TW_OUT']
-TS1_Unit=['C','C','C','C','C','C','C','C']
+TS1_Name=['TA_U','TF_U','TA_M','TF_M','TA_G','TF_G','TW_IN','TW_OUT','TA_OUT']
+TS1_Unit=['C','C','C','C','C','C','C','C','C']
 TS1_ID=['01144bf1efaa', #'TA_U'
     '01145167b9aa', #'TF_U'
     '000005675be3', #'TA_M'
@@ -32,6 +32,7 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     '54e1379c71ff',  #'TF_G'
     '0114515ff8aa', #'TW_IN'
     '0114515740aa'  #'TW_OUT'
+    'e3e1379c0cff'  #'TA_OUT'
     ]
 TS1_Count=len(TS1_Name)
 
