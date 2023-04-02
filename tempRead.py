@@ -69,8 +69,8 @@ try:
                     #if attempt<attemptCount-1:
                     #    print('   --- continuing ---')
                     pass
-                time.sleep(0.5)
-            time.sleep(2)
+                time.sleep(0.1)
+            time.sleep(.1)
                 
         # GROUP DATA WITH DATE
         TS_Name=['DateTime']+TS1_Name
