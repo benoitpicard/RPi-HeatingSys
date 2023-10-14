@@ -8,7 +8,7 @@ import time
 import numpy as np
 import pandas as pd
 from w1thermsensor import W1ThermSensor, Sensor
-import board
+#import board
 import sys, traceback
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -29,9 +29,9 @@ TS1_ID=['01144bf1efaa', #'TA_U'
     '000005675be3', #'TA_M'
     '01144b8b70aa', #'TF_M'
     '48e13793adff', #'TA_G'
-    '54e1379c71ff',  #'TF_G'
+    '54e1379c71ff', #'TF_G'
     '0114515ff8aa', #'TW_IN'
-    '0114515740aa',  #'TW_OUT'
+    '0114515740aa', #'TW_OUT'
     'e3e1379c0cff'  #'TA_OUT'
     ]
 TS1_Count=len(TS1_Name)
