@@ -8,7 +8,7 @@ import time
 import numpy as np
 import pandas as pd
 from w1thermsensor import W1ThermSensor, Sensor
-import board
+#import board
 import sys, traceback
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -22,16 +22,17 @@ exitFlag=False
 
 # --- SENSOR LIST (DS18B20) ---
 # RPi pin no default in used (GPIO4) for 1-wire protocol
-TS1_Name=['TA_U','TF_U','TA_M','TF_M','TA_G','TF_G','TW_IN','TW_OUT']
-TS1_Unit=['C','C','C','C','C','C','C','C']
+TS1_Name=['TA_U','TF_U','TA_M','TF_M','TA_G','TF_G','TW_IN','TW_OUT','TA_OUT']
+TS1_Unit=['C','C','C','C','C','C','C','C','C']
 TS1_ID=['01144bf1efaa', #'TA_U'
     '01145167b9aa', #'TF_U'
     '000005675be3', #'TA_M'
     '01144b8b70aa', #'TF_M'
     '48e13793adff', #'TA_G'
-    '54e1379c71ff',  #'TF_G'
+    '54e1379c71ff', #'TF_G'
     '0114515ff8aa', #'TW_IN'
-    '0114515740aa'  #'TW_OUT'
+    '0114515740aa', #'TW_OUT'
+    'e3e1379c0cff'  #'TA_OUT'
     ]
 TS1_Count=len(TS1_Name)
 
@@ -68,8 +69,8 @@ try:
                     #if attempt<attemptCount-1:
                     #    print('   --- continuing ---')
                     pass
-                time.sleep(0.5)
-            time.sleep(2)
+                time.sleep(0.1)
+            time.sleep(.1)
                 
         # GROUP DATA WITH DATE
         TS_Name=['DateTime']+TS1_Name

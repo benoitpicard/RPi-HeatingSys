@@ -12,11 +12,12 @@ import pandas as pd
 import os, sys, traceback
 # Import code functions
 from utilitiesHSC import getSetpointTemp
-from utilitiesHSC import tryReadCSV
+from utilitiesHSC import tryReadCSV, tryReadCSV_p
 
 # Initialization
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
-file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint.csv"
+file_modeSelect="/home/pi/RPi-HeatingSys-Data/tempSetpointModeSelect.csv"
+file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint_" #need to add Mode + ".csv"
 file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 file_tempWeather="/home/pi/RPi-HeatingSys-Data/dataTempWeather.csv"
 lastDateTime=pd.to_datetime('today')
@@ -54,9 +55,21 @@ try:
         read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
         read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
-        # --- Import control setpoint ---
+        # --- Import Setpoint Mode Type from csv input ---
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint,'',pd)
+        read_modeSelect,errorActive=tryReadCSV_p(file_modeSelect,'',pd,5,'DateTime')
+        if errorActive:
+            print('   --- abort loop ---')
+            break
+        dfMT=(nowDateTime-read_modeSelect['DateTime'])>pd.to_timedelta(0) #compare DateTime with current time and return if above 0
+        if any(dfMT==True):
+            Mode=read_modeSelect.iloc[(dfMT[dfMT==True].index.tolist()[-1])]['Mode'] # return Mode column of last true value
+        else: #assume no entry or all future value
+            Mode='Schedule'
+            
+        # --- Import Setpoint from csv schedule based on select mode ---
+        # Reading csv file with trials to avoid simulatneous reading errors
+        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
         if errorActive:
             print('   --- abort loop ---')
             break
@@ -72,6 +85,33 @@ try:
             DataList=DataList+targetTemp[Zone]  
         # Assign Target to Pandas Serie
         temp_Target=pd.Series(DataList,NameList)
+        # Debug - Debuging mode to be implemented!
+        #print(nowDateTime)
+        #print(dfMT.to_string())
+        #print(Mode)
+        #print(temp_Target.to_string())
+
+        # --- Mode Selection ---
+        # Mode selection to match HomeKit toolkit:
+        #   Each zone have 2 (Air & Floor)
+        #       for air temperature:
+        #           0 (OFF) : Away Mode, Set air target to 16
+        #           1 (HEAT): Manual Mode, Set to entered value (add schedule?)
+        #           3 (AUTO): Default to CSV schedule (maybe need to save it in the future?)
+        #       for floor temperature:
+        #           0 (OFF) : Water flow for sector is OFF
+        #           1 (HEAT): Manual Mode, Set to ON for 1 hour
+        #           3 (AUTO): Water flow for sector is ON (setpoint not used)
+        
+        # Minimal implementation as of jan 2023: manual mode not yet implemented
+        NameList=[]
+        DataList=()
+        for Zone in typeZone:
+            # Prepare Data for a Pandas Serie
+            NameList=NameList+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
+            DataList=DataList+(3,0)
+        # Assign Mode to Pandas Serie
+        temp_Mode=pd.Series(DataList,NameList)
         
         # --- Control logic ---
         # Reading csv file with trials to avoid simulatneous reading errors
@@ -93,6 +133,9 @@ try:
                 TA_Cmd=targetTemp[Zone][0]
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
+                # Correct Floor temp mode to AUTO if Valve Command is ON
+                if ValveCmd:
+                    temp_Mode['TF_'+Zone[0]+'_MODE']=3
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
@@ -104,7 +147,7 @@ try:
         
         # --- Save data to recording file ---
         # Combine data
-        dataAll=pd.concat([temp_Meas,temp_Target,new_valveCmd.iloc[0],read_tempWeather.iloc[-1]])
+        dataAll=pd.concat([temp_Meas,temp_Mode,temp_Target,new_valveCmd.iloc[0],read_tempWeather.iloc[-1]])
         dataAll=dataAll.to_frame().T.set_index('DateTime')
         # Save to file - Check Date and reset for new filename each day (or if file not found)
         fileDay=nowDateTime.strftime('%Y%m%d')
@@ -113,7 +156,7 @@ try:
             # If file does not exist
             dataAll.to_csv(file_controlSys,mode='w',header=True,index=True)
         else:
-            # Append to file
+            # Append to file - would need to run a try loop, in case csv file is currently read by webapp
             dataAll.to_csv(file_controlSys,mode='a',header=False,index=True)
         
         # --- Save to relay csv ---

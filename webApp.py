@@ -1,8 +1,10 @@
 # Import main modules
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
+import json
 import pandas as pd
 import numpy as np
 from datetime import date, timedelta
+
 
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -21,6 +23,17 @@ nowDateTime=pd.to_datetime('today')
 fileDay=nowDateTime.strftime('%Y%m%d')
 file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
 file_figLocation='./static/'
+
+# JSON Encoder
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
 
 @app.route('/')
 def index():
@@ -77,10 +90,11 @@ def data():
                         (read_controlSys['V2M']==0) & 
                         (read_controlSys['V3G']==0),'TW_dTon (C)']=np.nan
                         
-    xList=['DateTime','DateTime','DateTime','DateTime']
+    xList=['DateTime','DateTime','DateTime','DateTime','DateTime']
     yLists=[[['TA_M (C)','TF_M (C)','TA_M_TG (C)'],['V2M']], 
             [['TA_U (C)','TF_U (C)','TA_U_TG (C)'],['V1U']],
             [['TA_G (C)','TF_G (C)','TA_G_TG (C)'],['V3G']],
+            [['TA_OUT (C)','WT_OUT (C)'],['V2M']],
             [['TW_IN (C)','TW_OUT (C)'],['TW_dT (C)','TW_dTon (C)']]]
     figPath=genFigHHMM(read_controlSys,xList,yLists,'','',file_figLocation)
    
@@ -111,8 +125,8 @@ def data_ys():
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
-@app.route('/status')
-def status_JSON():
+@app.route('/<id>/status')
+def status_JSON(id):
     # Prepare JSON response. Format:
     #{
     #    "targetHeatingCoolingState": INT_VALUE,
@@ -120,24 +134,29 @@ def status_JSON():
     #    "currentHeatingCoolingState": INT_VALUE,
     #    "currentTemperature": FLOAT_VALUE
     #}
-    data={
-        "targetHeatingCoolingState": 1,
-        "targetTemperature": 15,
-        "currentHeatingCoolingState": 2,
-        "currentTemperature": 12
+    # Get latest data:
+    nowDateTime=pd.to_datetime('today')
+    fileDay=nowDateTime.strftime('%Y%m%d')
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
+    data={ # return data from last entry in csv file
+        "targetHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "targetTemperature": read_controlSys[id+'_TG (C)'].iloc[-1],
+        "currentHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
     }
-    return jsonify(data)
+    return json.dumps(data, cls=NpEncoder)
     
-@app.route('/targetHeatingCoolingState')
-def controlMode_update():
+@app.route('/<id>/targetHeatingCoolingState')
+def controlModeUpdate(id):
     #Modify temperature control mode
-    data='Hello World'
+    data=request.args.get('value')
     return data
     
-@app.route('/targetTemperature', methods=['GET', 'POST'])
-def controlTempUpdate():
+@app.route('/<id>/targetTemperature')
+def controlTempUpdate(id):
     #Modify temperature setpoint
-    data = request.get_data()
+    data = data=request.args.get('value')
     return data
 
 @app.route('/test')
