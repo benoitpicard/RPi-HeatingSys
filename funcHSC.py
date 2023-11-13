@@ -132,6 +132,11 @@ try:
                 TA_Read=temp_Meas['TA_'+Zone[0]+' (C)']
                 TA_Cmd=targetTemp[Zone][0]
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
+                # Exception for Zone3: Only active if 1 and 2 are off (since power limited, priority to zone 1 and 2)
+                if iZ==3:
+                    if new_valveCmd.loc[0,valveName[1]]==1 or new_valveCmd.loc[0,valveName[2]]==1:
+                        ValveCmd=0
+                # Save to ValveCmd vector
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
                 # Correct Floor temp mode to AUTO if Valve Command is ON
                 if ValveCmd:
@@ -141,7 +146,7 @@ try:
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
                 # add control for main floor convectair Eco Mode
                 if valveName[iZ]=='V2M':
-                    new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN OFF AT NIGHT
+                    new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN IN ECOMODE AT NIGHT
         else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
         
