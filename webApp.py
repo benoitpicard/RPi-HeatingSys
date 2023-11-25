@@ -76,7 +76,7 @@ def home():
     return render_template('home.html',tableHTML_1=currentData_HTML,currentTime=timeStr)
 
 @app.route('/graph')
-def data():
+def graph():
 
     timeStr=nowDateTime.strftime('%H:%M:%S')
     return render_template('graph.html',currentTime=timeStr)
