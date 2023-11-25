@@ -88,8 +88,7 @@ def get_data():
     nowDateTime=pd.to_datetime('today')
     fileDay=nowDateTime.strftime('%Y%m%d')
     
-    #file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
-    file_controlSys=os.path.join(os.path.dirname(notebook_path), fileDay+'_HSC_Data.csv')
+    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
     
     # Add dT calcs
