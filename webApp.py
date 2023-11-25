@@ -75,6 +75,12 @@ def home():
     currentData_HTML=currentData.transpose().to_html(border=1,index=True,header=False,classes='w3-table w3-striped w3-border')
     return render_template('home.html',tableHTML_1=currentData_HTML,currentTime=timeStr)
 
+@app.route('/graph')
+def data():
+
+    timeStr=nowDateTime.strftime('%H:%M:%S')
+    return render_template('graph.html',currentTime=timeStr)
+    
 @app.route('/graphdata')
 def get_data():
 
