@@ -75,6 +75,37 @@ def home():
     currentData_HTML=currentData.transpose().to_html(border=1,index=True,header=False,classes='w3-table w3-striped w3-border')
     return render_template('home.html',tableHTML_1=currentData_HTML,currentTime=timeStr)
 
+@app.route('/graphdata')
+def get_data():
+
+    # Get latest data:
+    nowDateTime=pd.to_datetime('today')
+    fileDay=nowDateTime.strftime('%Y%m%d')
+    
+    #file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
+    file_controlSys=os.path.join(os.path.dirname(notebook_path), fileDay+'_HSC_Data.csv')
+    read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
+    
+    # Add dT calcs
+    read_controlSys['TW_dT (C)']=read_controlSys['TW_IN (C)']-read_controlSys['TW_OUT (C)']
+    read_controlSys['TW_dTon (C)']=read_controlSys['TW_dT (C)']
+    read_controlSys.loc[(read_controlSys['V1U']==0) &
+                        (read_controlSys['V2M']==0) & 
+                        (read_controlSys['V3G']==0),'TW_dTon (C)']=np.nan
+  
+    
+    # Add Unit TimeStamp
+    read_controlSys['unix_timestamp'] =read_controlSys['DateTime'].astype(np.int64) // 10**6
+    
+    # Column to extract:
+    columns = ['TA_M (C)', 'TF_M (C)', 'TA_M_TG (C)', 'V2M', 'TA_U (C)', 'TF_U (C)', 'TA_U_TG (C)', 'V1U','TA_G (C)', 'TF_G (C)', 'TA_G_TG (C)', 'V3G','TA_OUT (C)','WT_OUT (C)','TW_IN (C)','TW_OUT (C)','TW_dT (C)','TW_dTon (C)']
+    dataset = []
+    for column in columns:
+        outData=read_controlSys[["unix_timestamp",column]].to_json(orient='values')
+        dataset.append({'label': column, 'data': json.loads(outData)})
+
+    return json.dumps(dataset)
+
 
 @app.route('/data')
 def data():
