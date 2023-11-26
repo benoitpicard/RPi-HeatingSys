@@ -134,7 +134,7 @@ try:
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
                 # Exception for Zone3: Only active if 1 and 2 are off (since power limited, priority to zone 1 and 2)
                 if valveName[iZ]=='V3G':
-                    if new_valveCmd.loc[0,valveName[1]]==1 or new_valveCmd.loc[0,valveName[2]]==1:
+                    if new_valveCmd.loc[0,valveName[0]]==1 or new_valveCmd.loc[0,valveName[1]]==1:
                         ValveCmd=0
                 # Save to ValveCmd vector
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
