@@ -124,7 +124,7 @@ def graphYS():
     return render_template('graph.html',currentTime=timeStr)
     
 @app.route('/graphdataYS')
-def get_data():
+def get_dataYS():
 
     # DATA ROUTE => USED BY HTML PAGE
     # Get latest data:
