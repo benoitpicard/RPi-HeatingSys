@@ -61,7 +61,7 @@ try:
         if errorActive:
             print('   --- abort loop ---')
             break
-        dfMT=(nowDateTime-read_modeSelect['DateTime'])>pd.to_timedelta(0) #compare DateTime with current time and return if above 0
+        dfMT=(nowDateTime-read_modeSelect['DateTime'])>pd.to_timedelta(0) #compare DateTime with current time and return true if above 0
         if any(dfMT==True):
             Mode=read_modeSelect.iloc[(dfMT[dfMT==True].index.tolist()[-1])]['Mode'] # return Mode column of last true value
         else: #assume no entry or all future value
@@ -95,13 +95,13 @@ try:
         # Mode selection to match HomeKit toolkit:
         #   Each zone have 2 (Air & Floor)
         #       for air temperature:
-        #           0 (OFF) : Away Mode, Set air target to 16
-        #           1 (HEAT): Manual Mode, Set to entered value (add schedule?)
-        #           3 (AUTO): Default to CSV schedule (maybe need to save it in the future?)
+        #       0    0 (OFF) : Away Mode, Set air target to 16
+        #       1    1 (HEAT): Manual Mode, Set to entered value (add schedule?)
+        #       2    3 (AUTO): Default to CSV schedule (maybe need to save it in the future?)
         #       for floor temperature:
-        #           0 (OFF) : Water flow for sector is OFF
-        #           1 (HEAT): Manual Mode, Set to ON for 1 hour
-        #           3 (AUTO): Water flow for sector is ON (setpoint not used)
+        #       0    0 (OFF) : Water flow for sector is OFF
+        #       1    1 (HEAT): Manual Mode, Set to ON for 1 hour
+        #       2    3 (AUTO): Water flow for sector is ON (setpoint not used)
         
         # Minimal implementation as of jan 2023: manual mode not yet implemented
         NameList=[]
@@ -140,7 +140,7 @@ try:
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
                 # Correct Floor temp mode to AUTO if Valve Command is ON
                 if ValveCmd:
-                    temp_Mode['TF_'+Zone[0]+'_MODE']=3
+                    temp_Mode['TF_'+Zone[0]+'_MODE']=2
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
