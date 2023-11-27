@@ -117,7 +117,7 @@ def get_data():
     return json.dumps(dataset)
 
 @app.route('/graphYS')
-def graph():
+def graphYS():
 
     # HTML PAGE ROUTE => GRAPH - will be calling /graphdata for client based graphs
     timeStr=nowDateTime.strftime('%H:%M:%S')
@@ -227,7 +227,7 @@ def modeSelectUdateCSV():
     return mode
     
 app.route('/modeSelectState')
-def modeSelectUdateCSV():
+def modeSelectState():
     nowDateTime=pd.to_datetime('today')
     read_modeSelect,errorActive=tryReadCSV_p(file_modeSelect,'',pd,5,'DateTime')
     dfMT=(nowDateTime-read_modeSelect['DateTime'])>pd.to_timedelta(0) #compare DateTime with current time and return true if above 0
