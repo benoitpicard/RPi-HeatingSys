@@ -108,17 +108,18 @@ try:
                 
             temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
             
-        # Abort method: if valveCmd.csv contains the exitflag
-        # Reading csv file with trials to avoid simulatneous reading errors
-        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
-        if errorActive:
-            print('   --- abort loop ---')
-            break
-        exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
-        # exit control through valveCmd csv:
-        if exitFlag:
-            print('[%.19s] tempRead.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
-            break
+        # ABORT METHOD REMOVED, ASSUME TEMP SENSOR IS SAFE TO EXECUTE EVEN WHEN SYSTEM IS NOT CONTROLLING 
+        # # Abort method: if valveCmd.csv contains the exitflag
+        # # Reading csv file with trials to avoid simulatneous reading errors
+        # read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
+        # if errorActive:
+            # print('   --- abort loop ---')
+            # break
+        # exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
+        # # exit control through valveCmd csv:
+        # if exitFlag:
+            # print('[%.19s] tempRead.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
+            # break
 
 except:
     #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
