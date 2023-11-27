@@ -236,9 +236,9 @@ def modeSelectState():
     else: #assume no entry or all future value
         Mode='Schedule'
     if Mode=='Schedule':
-        State=1
+        State='1'
     else:
-        State=0
+        State='0'
     
     return State
     
