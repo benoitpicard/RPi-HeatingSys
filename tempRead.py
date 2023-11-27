@@ -93,12 +93,13 @@ try:
             reset_tempData=False
         else:
             # Read CSV as pandas DataFrame
-            read_df,errorActive=tryReadCSV(file_tempSensor,TS_ColName[0],pd)
+            temp_df,errorActive=tryReadCSV(file_tempSensor,TS_ColName[0],pd)
             if errorActive:
                 print('   --- abort loop ---')
                 break
             newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
-            temp_df=read_df.append(newLine_df,sort=False)
+            #temp_df=read_df.append(newLine_df,sort=False)
+            temp_df = pd.concat([temp_df, newLine_df], ignore_index=True, sort=False)
             
             # remove 1st line if too long
             dfCount=len(temp_df.index)+1
