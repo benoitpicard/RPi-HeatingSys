@@ -121,7 +121,7 @@ def graphYS():
 
     # HTML PAGE ROUTE => GRAPH - will be calling /graphdata for client based graphs
     timeStr=nowDateTime.strftime('%H:%M:%S')
-    return render_template('graph.html',currentTime=timeStr)
+    return render_template('graphYS.html')
     
 @app.route('/graphdataYS')
 def get_dataYS():
