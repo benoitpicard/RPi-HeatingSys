@@ -226,7 +226,7 @@ def modeSelectUdateCSV():
     
     return Mode
     
-app.route('/modeSelectState')
+@app.route('/modeSelectState')
 def modeSelectState():
     nowDateTime=pd.to_datetime('today')
     read_modeSelect,errorActive=tryReadCSV_p(file_modeSelect,'',pd,5,'DateTime')
