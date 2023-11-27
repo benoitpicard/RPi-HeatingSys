@@ -99,7 +99,7 @@ try:
                 break
             newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
             #temp_df=read_df.append(newLine_df,sort=False)
-            temp_df = pd.concat([temp_df, newLine_df], ignore_index=True, sort=False)
+            temp_df = pd.concat([temp_df, newLine_df])
             
             # remove 1st line if too long
             dfCount=len(temp_df.index)+1
