@@ -224,7 +224,7 @@ def modeSelectUdateCSV():
         # Write Mode Selection to CSV (append)
         read_modeSelect.tail(1).to_csv(file_modeSelect,mode='a',header=False,index=False)
     
-    return mode
+    return Mode
     
 app.route('/modeSelectState')
 def modeSelectState():
