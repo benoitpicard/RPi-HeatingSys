@@ -128,8 +128,8 @@ def get_dataYS():
 
     # DATA ROUTE => USED BY HTML PAGE
     # Get latest data:
-    nowDateTime=pd.to_datetime('today')
-    fileDay=nowDateTime.strftime('%Y%m%d') + timedelta(days=-1)
+    nowDateTime=pd.to_datetime('today')+ timedelta(days=-1)
+    fileDay=nowDateTime.strftime('%Y%m%d') 
     
     file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
