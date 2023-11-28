@@ -93,12 +93,13 @@ try:
             reset_tempData=False
         else:
             # Read CSV as pandas DataFrame
-            read_df,errorActive=tryReadCSV(file_tempSensor,TS_ColName[0],pd)
+            temp_df,errorActive=tryReadCSV(file_tempSensor,TS_ColName[0],pd)
             if errorActive:
                 print('   --- abort loop ---')
                 break
             newLine_df=(pd.DataFrame(TS_Data,columns=TS_ColName)).set_index(TS_ColName[0])
-            temp_df=read_df.append(newLine_df,sort=False)
+            #temp_df=read_df.append(newLine_df,sort=False)
+            temp_df = pd.concat([temp_df, newLine_df])
             
             # remove 1st line if too long
             dfCount=len(temp_df.index)+1
@@ -107,17 +108,18 @@ try:
                 
             temp_df.to_csv(file_tempSensor,mode='w',header=True,index=True)
             
-        # Abort method: if valveCmd.csv contains the exitflag
-        # Reading csv file with trials to avoid simulatneous reading errors
-        read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
-        if errorActive:
-            print('   --- abort loop ---')
-            break
-        exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
-        # exit control through valveCmd csv:
-        if exitFlag:
-            print('[%.19s] tempRead.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
-            break
+        # ABORT METHOD REMOVED, ASSUME TEMP SENSOR IS SAFE TO EXECUTE EVEN WHEN SYSTEM IS NOT CONTROLLING 
+        # # Abort method: if valveCmd.csv contains the exitflag
+        # # Reading csv file with trials to avoid simulatneous reading errors
+        # read_valveCmd,errorActive=tryReadCSV(file_valveCmd,'',pd)
+        # if errorActive:
+            # print('   --- abort loop ---')
+            # break
+        # exitFlag=read_valveCmd.loc[0,'ExitFlag']==1
+        # # exit control through valveCmd csv:
+        # if exitFlag:
+            # print('[%.19s] tempRead.py: ExitFlag read at 1 (exiting infinite loop)' % pd.to_datetime('today'))
+            # break
 
 except:
     #retry reading (sometime fails due to simulatneous file writing by tempRead.py)
