@@ -82,37 +82,39 @@ def home():
 def graph():
 
     # HTML PAGE ROUTE => GRAPH - will be calling /graphdata for client based graphs
-    timeStr=nowDateTime.strftime('%H:%M:%S')
-    return render_template('graph.html',currentTime=timeStr)
+    dateTimeStr=nowDateTime.strftime('%Y%m%d %H:%M:%S')
+    return render_template('graph.html',currentTime=dateTimeStr)
     
-@app.route('/graphdata')
-def get_data():
+@app.route('/<fileDay>/graphdata')
+def get_data(fileDay):
 
     # DATA ROUTE => USED BY HTML PAGE
-    # Get latest data:
-    nowDateTime=pd.to_datetime('today')
+    # fileDay must be 'yyyymmdd':
     fileDay=nowDateTime.strftime('%Y%m%d')
-    
+   
     file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
     
-    # Add dT calcs
-    read_controlSys['TW_dT (C)']=read_controlSys['TW_IN (C)']-read_controlSys['TW_OUT (C)']
-    read_controlSys['TW_dTon (C)']=read_controlSys['TW_dT (C)']
-    read_controlSys.loc[(read_controlSys['V1U']==0) &
-                        (read_controlSys['V2M']==0) & 
-                        (read_controlSys['V3G']==0),'TW_dTon (C)']=np.nan
-  
-    
-    # Add Unit TimeStamp
-    read_controlSys['unix_timestamp'] =read_controlSys['DateTime'].astype(np.int64) // 10**6
-    
-    # Column to extract:
-    columns = ['TA_M (C)', 'TF_M (C)', 'TA_M_TG (C)', 'V2M', 'TA_U (C)', 'TF_U (C)', 'TA_U_TG (C)', 'V1U','TA_G (C)', 'TF_G (C)', 'TA_G_TG (C)', 'V3G','TA_OUT (C)','WT_OUT (C)','TW_IN (C)','TW_OUT (C)','TW_dT (C)','TW_dTon (C)']
-    dataset = []
-    for column in columns:
-        outData=read_controlSys[["unix_timestamp",column]].to_json(orient='values')
-        dataset.append({'label': column, 'data': json.loads(outData)})
+    if not errorActive:
+        # Add dT calcs
+        read_controlSys['TW_dT (C)']=read_controlSys['TW_IN (C)']-read_controlSys['TW_OUT (C)']
+        read_controlSys['TW_dTon (C)']=read_controlSys['TW_dT (C)']
+        read_controlSys.loc[(read_controlSys['V1U']==0) &
+                            (read_controlSys['V2M']==0) & 
+                            (read_controlSys['V3G']==0),'TW_dTon (C)']=np.nan
+      
+        
+        # Add Unit TimeStamp
+        read_controlSys['unix_timestamp'] =read_controlSys['DateTime'].astype(np.int64) // 10**6
+        
+        # Column to extract:
+        columns = ['TA_M (C)', 'TF_M (C)', 'TA_M_TG (C)', 'V2M', 'TA_U (C)', 'TF_U (C)', 'TA_U_TG (C)', 'V1U','TA_G (C)', 'TF_G (C)', 'TA_G_TG (C)', 'V3G','TA_OUT (C)','WT_OUT (C)','TW_IN (C)','TW_OUT (C)','TW_dT (C)','TW_dTon (C)']
+        dataset = []
+        for column in columns:
+            outData=read_controlSys[["unix_timestamp",column]].to_json(orient='values')
+            dataset.append({'label': column, 'data': json.loads(outData)})
+    else:
+        dataset='data not found'
 
     return json.dumps(dataset)
 

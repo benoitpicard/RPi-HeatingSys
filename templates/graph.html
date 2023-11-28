@@ -43,89 +43,8 @@
 	<script language="javascript" type="text/javascript" src="https://www.flotcharts.org/flot/source/jquery.flot.uiConstants.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.time.min.js"></script>
-
-	<script type="text/javascript">
-		$.ajax({
-			url: '/graphdata',
-			type: 'GET',
-			dataType: 'json',
-			success: function(data) {
-				//plot
-				$(document).ready(function () {
-
-					options = {
-						xaxes: [
-							{ mode: "time" }
-						],
-						yaxes: [
-							{ position: 'left', axisLabel: 'Temp (C)', showTickLabels: 'none', show: true },
-							{ position: 'right', axisLabel: 'On/Off', show: true, showTickLabels: 'none', showTicks: false, gridLines: false }
-						]
-					};
-
-					var indices = []
-					var fdata = []
-					
-					indices = [0,1,2,3];
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					fdata[0].yaxis=1;
-					fdata[1].yaxis=1;
-					fdata[2].yaxis=1;
-					fdata[3].yaxis=2;
-					$.plot( $("#mainplot"),fdata,options);
-
-					indices = [4,5,6,7];
-					fdata = []
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					fdata[0].yaxis=1;
-					fdata[1].yaxis=1;
-					fdata[2].yaxis=1;
-					fdata[3].yaxis=2;
-					$.plot( $("#upstairplot"),fdata,options);
-
-					indices = [8,9,10,11];
-					fdata = []
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					fdata[0].yaxis=1;
-					fdata[1].yaxis=1;
-					fdata[2].yaxis=1;
-					fdata[3].yaxis=2;
-					$.plot( $("#garageplot"),fdata,options);
-
-					options.yaxes[1].show=false;
-
-					indices = [12,13];
-					fdata = []
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					$.plot( $("#outtempplot"),fdata,options);
-					
-					indices = [14,15];
-					fdata = []
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					$.plot( $("#watertempplot"),fdata,options);
-					
-					indices = [16,17];
-					fdata = []
-					fdata = data.filter(function(obj, index) {
-						return indices.includes(index);
-					});
-					$.plot( $("#waterdtplot"),fdata,options);
-					
-				});
-			}
-		});
-	</script>
-
+	
+	<script src="{{ url_for('static', filename='graphFlot.js') }}"></script>
 </head>
 <body>
 
@@ -164,10 +83,20 @@
 	
 	<div class="w3-row w3-padding-64">
 	<div class="w3-container">
-	  <h2>Today's graph</h2>
 	  <p>Temperature for upstairs (U), main (M), garage (G) zones and heated water temperature</p>
-	  <p>Current time: {{currentTime}}</p>
-		
+	  <p>Today's date and current time: {{currentTime}}</p>
+		<form>
+			<label for="date">Select a date:</label>
+			<input type="date" id="date" name="date" onchange="updateGraph(this.value)">
+			<script>
+				const today = new Date().toISOString().split('T')[0];
+				const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+				const todayDateString = new Date().toLocaleDateString('en-CA', options);
+				document.querySelector('#date').setAttribute('max', todayDateString);
+				document.querySelector('#date').setAttribute('value', todayDateString);
+				updateGraph(todayDateString);
+			</script>
+	    </form>
 	</div>
 
 	<!-- GRAPH SECTION -->
@@ -231,6 +160,7 @@ function w3_close() {
   overlayBg.style.display = "none";
 }
 </script>
+
 
 </body>
 </html>
