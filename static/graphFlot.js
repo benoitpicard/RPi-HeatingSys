@@ -9,7 +9,7 @@ function updateGraph(dateString) {
 			//plot
 			$(document).ready(function () {
 
-				options = {
+				const options = {
 					xaxes: [
 						{ mode: "time" }
 					],

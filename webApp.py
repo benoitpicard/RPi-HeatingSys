@@ -90,8 +90,6 @@ def get_data(fileDay):
 
     # DATA ROUTE => USED BY HTML PAGE
     # fileDay must be 'yyyymmdd':
-    fileDay=nowDateTime.strftime('%Y%m%d')
-   
     file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV_p(file_controlSys,'',pd,5,'DateTime')
     
