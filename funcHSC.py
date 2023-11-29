@@ -27,6 +27,7 @@ exitFlag=False
 typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd'] #[Monday,Tuesday,Wednesday,Thrusday,Friday,Saturday,Sunday
 typeZone=['Upstair','Main','Garage']
 valveName=['V1U','V2M','V3G']
+idName=['TA_U','TA_M','TA_G']
 
 print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
 

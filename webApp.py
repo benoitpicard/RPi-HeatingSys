@@ -18,6 +18,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 10
 # Initialisation
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
 file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint.csv"
+file_controlSetpoint='/home/pi/RPi-HeatingSys-Data/controlSetpoint.csv'
 file_modeSelect="/home/pi/RPi-HeatingSys-Data/tempSetpointModeSelect.csv"
 file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 nowDateTime=pd.to_datetime('today')
@@ -266,15 +267,31 @@ def status_JSON(id):
     
 @app.route('/<id>/targetHeatingCoolingState')
 def controlModeUpdate(id):
+    method='targetHeatingCoolingState'
+    value=request.args.get('value')
     #Modify temperature control mode
-    data=request.args.get('value')
-    return data
+    # Read data
+    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetPoint,'ID',pd,5,'ID')
+    # Modify with input value   
+    read_controlSetPoint[method].loc[id]=value
+    # Save data
+    read_controlSetPoint.to_csv(file_controlSetPoint,mode='w',header=True,index=True)
+    
+    return value
     
 @app.route('/<id>/targetTemperature')
 def controlTempUpdate(id):
-    #Modify temperature setpoint
-    data = data=request.args.get('value')
-    return data
+    method='targetTemperature'
+    value=request.args.get('value')
+    # Modify temperature setpoint
+    # Read data
+    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetPoint,'ID',pd,5,'ID')
+    # Modify with input value   
+    read_controlSetPoint[method].loc[id]=value
+    # Save data
+    read_controlSetPoint.to_csv(file_controlSetPoint,mode='w',header=True,index=True)
+    
+    return value
 
 @app.route('/test')
 def test():
