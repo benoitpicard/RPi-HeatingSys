@@ -258,9 +258,9 @@ def status_JSON(id):
     file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
     read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
     data={ # return data from last entry in csv file
-        "targetHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "targetHeatingCoolingState": 1#read_controlSys[id+'_MODE'].iloc[-1],
         "targetTemperature": read_controlSys[id+'_TG (C)'].iloc[-1],
-        "currentHeatingCoolingState": read_controlSys[id+'_MODE'].iloc[-1],
+        "currentHeatingCoolingState": 1#read_controlSys[id+'_MODE'].iloc[-1],
         "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
     }
     return json.dumps(data, cls=NpEncoder)
@@ -273,7 +273,7 @@ def controlModeUpdate(id):
     # Read data
     read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
-    read_controlSetPoint[method].loc[id]=value
+    read_controlSetPoint.loc[id,method]=value
     # Save data
     read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
@@ -287,7 +287,7 @@ def controlTempUpdate(id):
     # Read data
     read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
-    read_controlSetPoint[method].loc[id]=value
+    read_controlSetPoint.loc[id,method]=value
     # Save data
     read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
