@@ -271,11 +271,11 @@ def controlModeUpdate(id):
     value=request.args.get('value')
     #Modify temperature control mode
     # Read data
-    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetPoint,'ID',pd,5,'ID')
+    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
     read_controlSetPoint[method].loc[id]=value
     # Save data
-    read_controlSetPoint.to_csv(file_controlSetPoint,mode='w',header=True,index=True)
+    read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
     
@@ -285,11 +285,11 @@ def controlTempUpdate(id):
     value=request.args.get('value')
     # Modify temperature setpoint
     # Read data
-    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetPoint,'ID',pd,5,'ID')
+    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
     read_controlSetPoint[method].loc[id]=value
     # Save data
-    read_controlSetPoint.to_csv(file_controlSetPoint,mode='w',header=True,index=True)
+    read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
 
