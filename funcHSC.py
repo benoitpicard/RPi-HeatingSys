@@ -71,7 +71,7 @@ try:
             
         # # --- Import Setpoint from csv schedule based on select mode ---
         # # Reading csv file with trials to avoid simulatneous reading errors
-        #read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
+        #read_controlSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
         #if errorActive:
         #    print('   --- abort loop ---')
         #    break
@@ -81,7 +81,7 @@ try:
         #DataList=()
         #for Zone in typeZone:
         #    # Get target temperature from each zone
-        #    targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef,pd)
+        #    targetTemp[Zone]=getSetpointTemp(read_controlSetpoint,Zone,nowDateTime,typeDayRef,pd)
         #    # Prepare Data for a Pandas Serie
         #    NameList=NameList+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
         #    DataList=DataList+targetTemp[Zone]
@@ -99,7 +99,7 @@ try:
         #       0    0 (OFF) : Water flow for sector is OFF (not used)
         #       1    1 (HEAT): Manual Mode, Set to ON for 1 hour (not used)
 
-        read_tempSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+        read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
         # Setpoint (Target Temp)
         NameListSetpoint=[]
         DataListSetpoint=[]
@@ -175,7 +175,7 @@ try:
             read_controlSetpoint.loc['TF_'+Zone[0],'currentTemperature']=temp_Meas['TF_'+Zone[0]+' (C)']
             read_controlSetpoint.loc['TF_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TF_'+Zone[0]+' (C)']
         # Save data
-        read_tempSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)     
+        read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)     
         
         # --- Save data to recording file ---
         # Combine data
