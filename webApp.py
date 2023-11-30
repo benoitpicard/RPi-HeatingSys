@@ -207,7 +207,7 @@ def get_dataYS():
     # timeStr=nowDateTime.strftime('%H:%M:%S')
     # return render_template('data_ys.html',imgs=figPath,currentTime=timeStr)
 
-# APP ROUTE FOR MODE SELECTION (REQUEST FROM URL ON HOMEBRIDGE
+# APP ROUTE FOR MODE SELECTION (REQUEST FROM URL ON HOMEBRIDGE)
 @app.route('/modeSelect')
 def modeSelectUdateCSV():
     #Modify temperature control mode
@@ -237,9 +237,9 @@ def modeSelectState():
     else: #assume no entry or all future value
         Mode='Schedule'
     if Mode=='Schedule':
-        State='1'
-    else:
         State='0'
+    else:
+        State='1'
     
     return State
     
@@ -253,15 +253,13 @@ def status_JSON(id):
     #    "currentTemperature": FLOAT_VALUE
     #}
     # Get latest data:
-    nowDateTime=pd.to_datetime('today')
-    fileDay=nowDateTime.strftime('%Y%m%d')
-    file_controlSys='/home/pi/RPi-HeatingSys-Data/DATA/'+fileDay+'_HSC_Data.csv'
-    read_controlSys,errorActive=tryReadCSV(file_controlSys,'',pd)
+    # Read data
+    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     data={ # return data from last entry in csv file
-        "targetHeatingCoolingState": 1,#read_controlSys[id+'_MODE'].iloc[-1],
-        "targetTemperature": read_controlSys[id+'_TG (C)'].iloc[-1],
-        "currentHeatingCoolingState": 1,#read_controlSys[id+'_MODE'].iloc[-1],
-        "currentTemperature": read_controlSys[id+' (C)'].iloc[-1]
+        "targetHeatingCoolingState": read_controlSetpoint.loc[id,'targetHeatingCoolingState'],
+        "targetTemperature": read_controlSetpoint.loc[id,'targetTemperature'],
+        "currentHeatingCoolingState": read_controlSetpoint.loc[id,'currentHeatingCoolingState'],
+        "currentTemperature": read_controlSetpoint.loc[id,'currentTemperature']
     }
     return json.dumps(data, cls=NpEncoder)
     

@@ -17,17 +17,18 @@ from utilitiesHSC import tryReadCSV, tryReadCSV_p
 # Initialization
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
 file_modeSelect="/home/pi/RPi-HeatingSys-Data/tempSetpointModeSelect.csv"
-file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint_" #need to add Mode + ".csv"
+file_controlSetpoint='/home/pi/RPi-HeatingSys-Data/controlSetpoint.csv'
+#file_tempSetpoint="/home/pi/RPi-HeatingSys-Data/tempSetpoint_" #need to add Mode + ".csv"
 file_valveCmd="/home/pi/RPi-HeatingSys-Data/valveCmd.csv"
 file_tempWeather="/home/pi/RPi-HeatingSys-Data/dataTempWeather.csv"
 lastDateTime=pd.to_datetime('today')
 exitFlag=False
 
 # Setup
-typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd'] #[Monday,Tuesday,Wednesday,Thrusday,Friday,Saturday,Sunday
+#typeDayRef=['Week','Week','Week','Week','Week','WeekEnd','WeekEnd'] #[Monday,Tuesday,Wednesday,Thrusday,Friday,Saturday,Sunday
 typeZone=['Upstair','Main','Garage']
 valveName=['V1U','V2M','V3G']
-idName=['TA_U','TA_M','TA_G']
+#idName=['TA_U','TA_M','TA_G']
 
 print('[%.19s] funcHSC.py: Setup completed, starting control' % pd.to_datetime('today'))
 
@@ -56,7 +57,7 @@ try:
         read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
         read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
-        # --- Import Setpoint Mode Type from csv input ---
+        # --- Import AwayMode Type from csv input ---
         # Reading csv file with trials to avoid simulatneous reading errors
         read_modeSelect,errorActive=tryReadCSV_p(file_modeSelect,'',pd,5,'DateTime')
         if errorActive:
@@ -68,51 +69,63 @@ try:
         else: #assume no entry or all future value
             Mode='Schedule'
             
-        # --- Import Setpoint from csv schedule based on select mode ---
-        # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
-        if errorActive:
-            print('   --- abort loop ---')
-            break
+        # # --- Import Setpoint from csv schedule based on select mode ---
+        # # Reading csv file with trials to avoid simulatneous reading errors
+        #read_tempSetpoint,errorActive=tryReadCSV(file_tempSetpoint+Mode+'.csv','',pd)
+        #if errorActive:
+        #    print('   --- abort loop ---')
+        #    break
         # Read and fit into array by zone
-        targetTemp={}
-        NameList=[]
-        DataList=()
-        for Zone in typeZone:
-            # Get target temperature from each zone
-            targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef,pd)
-            # Prepare Data for a Pandas Serie
-            NameList=NameList+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
-            DataList=DataList+targetTemp[Zone]  
-        # Assign Target to Pandas Serie
-        temp_Target=pd.Series(DataList,NameList)
-        # Debug - Debuging mode to be implemented!
-        #print(nowDateTime)
-        #print(dfMT.to_string())
-        #print(Mode)
-        #print(temp_Target.to_string())
-
+        #targetTemp={}
+        #NameList=[]
+        #DataList=()
+        #for Zone in typeZone:
+        #    # Get target temperature from each zone
+        #    targetTemp[Zone]=getSetpointTemp(read_tempSetpoint,Zone,nowDateTime,typeDayRef,pd)
+        #    # Prepare Data for a Pandas Serie
+        #    NameList=NameList+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
+        #    DataList=DataList+targetTemp[Zone]
+        # # Assign Target to Pandas Serie
+        #temp_Target=pd.Series(DataList,NameList)
+        
+        # --- Import Setpoint and Target Mode from HomeKit-updated csv
         # --- Mode Selection ---
         # Mode selection to match HomeKit toolkit:
         #   Each zone have 2 (Air & Floor)
         #       for air temperature:
-        #       0    0 (OFF) : Away Mode, Set air target to 16
-        #       1    1 (HEAT): Manual Mode, Set to entered value (add schedule?)
-        #       2    3 (AUTO): Default to CSV schedule (maybe need to save it in the future?)
-        #       for floor temperature:
-        #       0    0 (OFF) : Water flow for sector is OFF
-        #       1    1 (HEAT): Manual Mode, Set to ON for 1 hour
-        #       2    3 (AUTO): Water flow for sector is ON (setpoint not used)
-        
-        # Minimal implementation as of jan 2023: manual mode not yet implemented
-        NameList=[]
-        DataList=()
+        #       0    0 (OFF) : Off Mode, Set air target to 12 (freeze protection)
+        #       1    1 (HEAT): Manual Mode, Set to entered value
+        #       for floor temperature: (not used, only displayed)
+        #       0    0 (OFF) : Water flow for sector is OFF (not used)
+        #       1    1 (HEAT): Manual Mode, Set to ON for 1 hour (not used)
+
+        read_tempSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+        # Setpoint (Target Temp)
+        NameListSetpoint=[]
+        DataListSetpoint=[]
+        NameListMode=[]
+        DataListMode=[]
+        Mode='Schedule'
         for Zone in typeZone:
+            # Get target temperature from each zone
+            targetTemp=read_controlSetpoint.loc['TA_'+Zone[0],'targetTemperature']
+            targetMode=read_controlSetpoint.loc['TA_'+Zone[0],'targetHeatingCoolingState']
             # Prepare Data for a Pandas Serie
-            NameList=NameList+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
-            DataList=DataList+(3,0)
-        # Assign Mode to Pandas Serie
-        temp_Mode=pd.Series(DataList,NameList)
+            NameListSetpoint=NameListSetpoint+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
+            NameListMode=NameListMode+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
+            # Modify temp target based on mode
+            if TargetMode=='0':
+                # Off Mode:
+                targetTemp=12
+            elif Mode=='Away':
+                # Away Mode:
+                targetTemp=18
+            # Save Mode & Target
+            DataListSetpoint=DataListSetpoint+[targetTemp,23]
+            DataListMode=DataListMode+[targetMode,0]
+        # Assign Target to Pandas Serie
+        temp_Target=pd.Series(DataListSetpoint,NameListSetpoint)
+        temp_Mode=pd.Series(DataListMode,NameListMode)
         
         # --- Control logic ---
         # Reading csv file with trials to avoid simulatneous reading errors
@@ -131,17 +144,17 @@ try:
             for iZ in range(len(typeZone)):
                 Zone=typeZone[iZ]
                 TA_Read=temp_Meas['TA_'+Zone[0]+' (C)']
-                TA_Cmd=targetTemp[Zone][0]
+                TA_Cmd=temp_Target['TA_'+Zone[0]+'_TG (C)']
                 ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
-                # Exception for Zone3: Only active if 1 and 2 are off (since power limited, priority to zone 1 and 2)
+                # Exception for Zone3: Only active if 1 or 2 are off (since power limited, priority to zone 1 and 2)
                 if valveName[iZ]=='V3G':
                     if new_valveCmd.loc[0,valveName[0]]==1 or new_valveCmd.loc[0,valveName[1]]==1:
                         ValveCmd=0
                 # Save to ValveCmd vector
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
-                # Correct Floor temp mode to AUTO if Valve Command is ON
-                if ValveCmd:
-                    temp_Mode['TF_'+Zone[0]+'_MODE']=2
+                # # Correct Floor temp mode to AUTO if Valve Command is ON
+                #if ValveCmd:
+                #    temp_Mode['TF_'+Zone[0]+'_MODE']=2
                 # add time info and force relay exitflag off
                 new_valveCmd.loc[0,'ExitFlag']=0
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
@@ -150,6 +163,19 @@ try:
                     new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN IN ECOMODE AT NIGHT
         else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
+        # update temp_Mode for floor stutas based on selection
+        for iZ in range(len(typeZone)):
+            temp_Mode['TF_'+Zone[0]'_MODE']=new_valveCmd.loc[0,valveName[iZ]]
+        
+        # --- Save Current Temp and Mode to file ---
+        # Modify with updated data   
+        for Zone in typeZone:
+            read_controlSetpoint.loc['TA_'+Zone[0],'currentTemperature']=temp_Meas['TA_'+Zone[0]+' (C)']
+            read_controlSetpoint.loc['TA_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TA_'+Zone[0]+' (C)']
+            read_controlSetpoint.loc['TF_'+Zone[0],'currentTemperature']=temp_Meas['TF_'+Zone[0]+' (C)']
+            read_controlSetpoint.loc['TF_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TF_'+Zone[0]+' (C)']
+        # Save data
+        read_tempSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)     
         
         # --- Save data to recording file ---
         # Combine data
