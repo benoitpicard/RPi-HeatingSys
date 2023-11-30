@@ -171,9 +171,13 @@ try:
         # Modify with updated data   
         for Zone in typeZone:
             read_controlSetpoint.loc['TA_'+Zone[0],'currentTemperature']=temp_Meas['TA_'+Zone[0]+' (C)']
-            read_controlSetpoint.loc['TA_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TA_'+Zone[0]+'_MODE']
             read_controlSetpoint.loc['TF_'+Zone[0],'currentTemperature']=temp_Meas['TF_'+Zone[0]+' (C)']
+            read_controlSetpoint.loc['TA_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TA_'+Zone[0]+'_MODE']
             read_controlSetpoint.loc['TF_'+Zone[0],'currentHeatingCoolingState']=temp_Mode['TF_'+Zone[0]+'_MODE']
+            read_controlSetpoint.loc['TA_'+Zone[0],'targetTemperature']=temp_Target['TA_'+Zone[0]+'_TG (C)']
+            read_controlSetpoint.loc['TF_'+Zone[0],'targetTemperature']=temp_Target['TF_'+Zone[0]+'_TG (C)']
+            read_controlSetpoint.loc['TA_'+Zone[0],'targetHeatingCoolingState']=temp_Mode['TA_'+Zone[0]+'_MODE']
+            read_controlSetpoint.loc['TF_'+Zone[0],'targetHeatingCoolingState']=temp_Mode['TF_'+Zone[0]+'_MODE']
         # Save data
         read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)     
         
