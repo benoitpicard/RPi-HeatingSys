@@ -254,7 +254,7 @@ def status_JSON(id):
     #}
     # Get latest data:
     # Read data
-    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+    read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     data={ # return data from last entry in csv file
         "targetHeatingCoolingState": read_controlSetpoint.loc[id,'targetHeatingCoolingState'],
         "targetTemperature": read_controlSetpoint.loc[id,'targetTemperature'],
@@ -269,11 +269,11 @@ def controlModeUpdate(id):
     value=request.args.get('value')
     #Modify temperature control mode
     # Read data
-    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+    read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
-    read_controlSetPoint.loc[id,method]=value
+    read_controlSetpoint.loc[id,method]=value
     # Save data
-    read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
+    read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
     
@@ -283,11 +283,11 @@ def controlTempUpdate(id):
     value=request.args.get('value')
     # Modify temperature setpoint
     # Read data
-    read_controlSetPoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+    read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
     # Modify with input value   
-    read_controlSetPoint.loc[id,method]=value
+    read_controlSetpoint.loc[id,method]=value
     # Save data
-    read_controlSetPoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
+    read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
 
