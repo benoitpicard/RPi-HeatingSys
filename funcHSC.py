@@ -114,7 +114,7 @@ try:
             NameListSetpoint=NameListSetpoint+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
             NameListMode=NameListMode+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
             # Modify temp target based on mode
-            if TargetMode=='0':
+            if targetMode=='0':
                 # Off Mode:
                 targetTemp=12
             elif Mode=='Away':
