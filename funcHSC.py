@@ -165,6 +165,7 @@ try:
             new_valveCmd.loc[0,'DateTime']=nowDateTime
         # update temp_Mode for floor stutas based on selection
         for iZ in range(len(typeZone)):
+            Zone=typeZone[iZ]
             temp_Mode['TF_'+Zone[0]+'_MODE']=new_valveCmd.loc[0,valveName[iZ]]
         
         # --- Save Current Temp and Mode to file ---
