@@ -105,7 +105,6 @@ try:
         DataListSetpoint=[]
         NameListMode=[]
         DataListMode=[]
-        Mode='Schedule'
         for Zone in typeZone:
             # Get target temperature from each zone
             targetTemp=read_controlSetpoint.loc['TA_'+Zone[0],'targetTemperature']
