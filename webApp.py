@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import numpy as np
 from datetime import date, timedelta
-
+from threading import Lock
 
 # Import code functions
 from utilitiesHSC import tryReadCSV
@@ -13,6 +13,7 @@ from utilitiesHSC import genFigHHMM
 
 # Web server application 
 app = Flask(__name__)
+lock = Lock() # threading control to avoid accessing the status file
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 10
 
 # Initialisation
@@ -268,12 +269,13 @@ def controlModeUpdate(id):
     method='targetHeatingCoolingState'
     value=request.args.get('value')
     #Modify temperature control mode
-    # Read data
-    read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
-    # Modify with input value   
-    read_controlSetpoint.loc[id,method]=value
-    # Save data
-    read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
+    with lock:
+        # Read data
+        read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+        # Modify with input value   
+        read_controlSetpoint.loc[id,method]=value
+        # Save data
+        read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
     
@@ -282,12 +284,13 @@ def controlTempUpdate(id):
     method='targetTemperature'
     value=request.args.get('value')
     # Modify temperature setpoint
-    # Read data
-    read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
-    # Modify with input value   
-    read_controlSetpoint.loc[id,method]=value
-    # Save data
-    read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
+    with lock:
+        # Read data
+        read_controlSetpoint,errorActive=tryReadCSV_p(file_controlSetpoint,'ID',pd,5,'ID')
+        # Modify with input value   
+        read_controlSetpoint.loc[id,method]=value
+        # Save data
+        read_controlSetpoint.to_csv(file_controlSetpoint,mode='w',header=True,index=True)
     
     return value
 
