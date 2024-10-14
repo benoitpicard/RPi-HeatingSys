@@ -107,21 +107,29 @@ try:
         DataListMode=[]
         for Zone in typeZone:
             # Get target temperature from each zone
-            targetTemp=read_controlSetpoint.loc['TA_'+Zone[0],'targetTemperature']
-            targetMode=read_controlSetpoint.loc['TA_'+Zone[0],'targetHeatingCoolingState']
+            TA_targetTemp=read_controlSetpoint.loc['TA_'+Zone[0],'targetTemperature']
+            TA_targetMode=read_controlSetpoint.loc['TA_'+Zone[0],'targetHeatingCoolingState']
+            TF_targetTemp=read_controlSetpoint.loc['TF_'+Zone[0],'targetTemperature']
+            TF_targetMode=read_controlSetpoint.loc['TF_'+Zone[0],'targetHeatingCoolingState']
             # Prepare Data for a Pandas Serie
             NameListSetpoint=NameListSetpoint+[('TA_'+Zone[0]+'_TG (C)'),('TF_'+Zone[0]+'_TG (C)')]
             NameListMode=NameListMode+[('TA_'+Zone[0]+'_MODE'),('TF_'+Zone[0]+'_MODE')]
             # Modify temp target based on mode
-            if targetMode=='0':
+            if TA_targetMode=='0':
                 # Off Mode:
-                targetTemp=12
+                TA_targetTemp=12
             elif Mode=='Away':
                 # Away Mode:
-                targetTemp=18
+                TA_targetTemp=18
+            if TF_targetMode=='0':
+                # Off Mode:
+                TF_targetTemp=12
+            elif Mode=='Away':
+                # Away Mode:
+                TF_targetTemp=18
             # Save Mode & Target
-            DataListSetpoint=DataListSetpoint+[targetTemp,23]
-            DataListMode=DataListMode+[targetMode,0]
+            DataListSetpoint=DataListSetpoint+[TA_targetTemp,TF_targetTemp]
+            DataListMode=DataListMode+[TA_targetMode,TF_targetMode]
         # Assign Target to Pandas Serie
         temp_Target=pd.Series(DataListSetpoint,NameListSetpoint)
         temp_Mode=pd.Series(DataListMode,NameListMode)
@@ -137,18 +145,31 @@ try:
         # exit control through valveCmd csv:
         if exitFlag:
             break
-        # activate relay if air temp below target (basic control logic)
+        # activate heating if air or floor target is above measured temp
+        #    applying hysteresis to avoid short on/off cycle
+        hysteresis = 0.1 #degC
         new_valveCmd=read_valveCmd
         if overrideOff: #only change command if override not active
             for iZ in range(len(typeZone)):
                 Zone=typeZone[iZ]
                 TA_Read=temp_Meas['TA_'+Zone[0]+' (C)']
                 TA_Cmd=temp_Target['TA_'+Zone[0]+'_TG (C)']
-                ValveCmd=int(TA_Read<TA_Cmd) #SIMPLE LOGIC HERE - TO BE UPDATED!
+                TF_Read=temp_Meas['TF_'+Zone[0]+' (C)']
+                TF_Cmd=temp_Target['TF_'+Zone[0]+'_TG (C)']
+                # Default to previous value
+                ValveCmd = new_valveCmd.loc[0,valveName[iZ]]
+                # Update control value based on target and hysteresis
+                if TA_Read < TA_Cmd - hysteresis or TF_Read < TF_Cmd - hysteresis:
+                    ValveCmd = 1
+                elif TA_Read > TA_Cmd + hysteresis and TF_Read > TF_Cmd + hysteresis:
+                    ValveCmd = 0
+                
                 # Exception for Zone3: Only active if 1 or 2 are off (since power limited, priority to zone 1 and 2)
-                if valveName[iZ]=='V3G':
-                    if new_valveCmd.loc[0,valveName[0]]==1 or new_valveCmd.loc[0,valveName[1]]==1:
-                        ValveCmd=0
+                #     exception removed since garage flow is very small and does not affect power allocation much
+                #if valveName[iZ]=='V3G':
+                #    if new_valveCmd.loc[0,valveName[0]]==1 or new_valveCmd.loc[0,valveName[1]]==1:
+                #        ValveCmd=0
+                
                 # Save to ValveCmd vector
                 new_valveCmd.loc[0,valveName[iZ]]=ValveCmd
                 # # Correct Floor temp mode to AUTO if Valve Command is ON
@@ -159,13 +180,13 @@ try:
                 new_valveCmd.loc[0,'DateTime']=nowDateTime
                 # add control for main floor convectair Eco Mode
                 if valveName[iZ]=='V2M':
-                    new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20) # SIMPLE LOGIG TO TURN IN ECOMODE AT NIGHT
+                    new_valveCmd.loc[0,'V4E']=int(TA_Cmd<=20.8) # SIMPLE LOGIG TO TURN IN ECOMODE AT NIGHT
         else: #change time even when overrides
             new_valveCmd.loc[0,'DateTime']=nowDateTime
-        # update temp_Mode for floor stutas based on selection
-        for iZ in range(len(typeZone)):
-            Zone=typeZone[iZ]
-            temp_Mode['TF_'+Zone[0]+'_MODE']=new_valveCmd.loc[0,valveName[iZ]]
+        #  update temp_Mode for floor stutas based on selection (not since adding manual temp target on floor)
+        #for iZ in range(len(typeZone)):
+        #    Zone=typeZone[iZ]
+        #    temp_Mode['TF_'+Zone[0]+'_MODE']=new_valveCmd.loc[0,valveName[iZ]]
         
         # --- Save Current Temp and Mode to file ---
         # Modify with updated data   
