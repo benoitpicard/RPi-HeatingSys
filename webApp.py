@@ -108,7 +108,7 @@ def get_data(fileDay):
         read_controlSys['unix_timestamp'] =read_controlSys['DateTime'].astype(np.int64) // 10**6
         
         # Column to extract:
-        columns = ['TA_M (C)', 'TF_M (C)', 'TA_M_TG (C)', 'V2M', 'TA_U (C)', 'TF_U (C)', 'TA_U_TG (C)', 'V1U','TA_G (C)', 'TF_G (C)', 'TA_G_TG (C)', 'V3G','TA_OUT (C)','WT_OUT (C)','TW_IN (C)','TW_OUT (C)','TW_dT (C)','TW_dTon (C)']
+        columns = ['TA_M (C)', 'TF_M (C)', 'TA_M_TG (C)', 'V2M', 'TA_U (C)', 'TF_U (C)', 'TA_U_TG (C)', 'V1U','TA_G (C)', 'TF_G (C)', 'TA_G_TG (C)', 'V3G','TA_OUT (C)','TW_IN (C)','TW_OUT (C)','TW_dT (C)','TW_dTon (C)']
         dataset = []
         for column in columns:
             outData=read_controlSys[["unix_timestamp",column]].to_json(orient='values')

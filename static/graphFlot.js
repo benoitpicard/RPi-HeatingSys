@@ -56,21 +56,21 @@ function updateGraph(dateString) {
 
 				options.yaxes[1].show=false;
 
-				indices = [12,13];
+				indices = [12];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				$.plot( $("#outtempplot"),fdata,options);
 				
-				indices = [14,15];
+				indices = [13,14];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				$.plot( $("#watertempplot"),fdata,options);
 				
-				indices = [16,17];
+				indices = [15,16];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
