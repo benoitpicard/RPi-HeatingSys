@@ -52,10 +52,10 @@ try:
         temp_Meas=read_tempSensor[boolCurWindow].mean()
         temp_Meas['dataAvg (Count)']=np.sum(boolCurWindow)
         
-        # --- Import Weather Current Data ---
+        # --- Import Weather Current Data --- (remove 2024-10-14, connection to server not reliable)
         # Reading csv file with trials to avoid simulatneous reading errors
-        read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
-        read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
+        # read_tempWeather,errorActive=tryReadCSV(file_tempWeather,'',pd)
+        # read_tempWeather.index=pd.to_datetime(read_tempWeather.index) #convert read string date to pandas date
         
         # --- Import AwayMode Type from csv input ---
         # Reading csv file with trials to avoid simulatneous reading errors
@@ -204,7 +204,7 @@ try:
         
         # --- Save data to recording file ---
         # Combine data
-        dataAll=pd.concat([temp_Meas,temp_Mode,temp_Target,new_valveCmd.iloc[0],read_tempWeather.iloc[-1]])
+        dataAll=pd.concat([temp_Meas,temp_Mode,temp_Target,new_valveCmd.iloc[0]])
         dataAll=dataAll.to_frame().T.set_index('DateTime')
         # Save to file - Check Date and reset for new filename each day (or if file not found)
         fileDay=nowDateTime.strftime('%Y%m%d')
