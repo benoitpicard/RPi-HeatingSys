@@ -51,8 +51,8 @@ try:
         boolCurWindow=np.logical_and(read_tempSensor.index>=lastDateTime,read_tempSensor.index<nowDateTime);
         #   Average data in Pandas Serie
         temp_Meas=read_tempSensor[boolCurWindow].mean()
+        temp_Meas['TP_CPU']=get_CPU_temperature()
         temp_Meas['dataAvg (Count)']=np.sum(boolCurWindow)
-        temp_Meas['TP_CPU']=np.sum(boolCurWindow)
         
         # --- Import Weather Current Data --- (remove 2024-10-14, connection to server not reliable)
         # Reading csv file with trials to avoid simulatneous reading errors
