@@ -107,3 +107,8 @@ def genFigHHMM(df,xList,yLists,xLabel,yLabels,filePath):
         #plt.cla() #clear axis of figure
         plt.close(fig) #remove from plt memory (need to be done explicitly)
     return figPath
+    
+def get_CPU_temperature():
+    with open("/sys/class/thermal/thermal_zone0/temp", "r") as file:
+        temp = int(file.read()) / 1000.0  # Convert from millidegrees to degrees
+    return temp

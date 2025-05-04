@@ -13,6 +13,7 @@ import os, sys, traceback
 # Import code functions
 from utilitiesHSC import getSetpointTemp
 from utilitiesHSC import tryReadCSV, tryReadCSV_p
+from utilitiesHSC import get_CPU_temperature
 
 # Initialization
 file_tempSensor="/home/pi/RPi-HeatingSys-Data/dataTempSensor.csv"
@@ -51,6 +52,7 @@ try:
         #   Average data in Pandas Serie
         temp_Meas=read_tempSensor[boolCurWindow].mean()
         temp_Meas['dataAvg (Count)']=np.sum(boolCurWindow)
+        temp_Meas['TP_CPU']=np.sum(boolCurWindow)
         
         # --- Import Weather Current Data --- (remove 2024-10-14, connection to server not reliable)
         # Reading csv file with trials to avoid simulatneous reading errors
