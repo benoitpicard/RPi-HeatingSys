@@ -22,17 +22,18 @@ function updateGraph(dateString) {
 				var indices = []
 				var fdata = []
 				
-				indices = [0,1,2,3];
+				indices = [0,1,2,3,4];
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				fdata[0].yaxis=1;
 				fdata[1].yaxis=1;
 				fdata[2].yaxis=1;
-				fdata[3].yaxis=2;
+				fdata[3].yaxis=1;
+				fdata[4].yaxis=2;
 				$.plot( $("#mainplot"),fdata,options);
 
-				indices = [4,5,6,7];
+				indices = [5,6,7,8,9];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
@@ -40,10 +41,11 @@ function updateGraph(dateString) {
 				fdata[0].yaxis=1;
 				fdata[1].yaxis=1;
 				fdata[2].yaxis=1;
-				fdata[3].yaxis=2;
+				fdata[3].yaxis=1;
+				fdata[4].yaxis=2;
 				$.plot( $("#upstairplot"),fdata,options);
 
-				indices = [8,9,10,11];
+				indices = [10,11,12,13,14];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
@@ -51,31 +53,39 @@ function updateGraph(dateString) {
 				fdata[0].yaxis=1;
 				fdata[1].yaxis=1;
 				fdata[2].yaxis=1;
-				fdata[3].yaxis=2;
+				fdata[3].yaxis=1;
+				fdata[4].yaxis=2;
 				$.plot( $("#garageplot"),fdata,options);
 
 				options.yaxes[1].show=false;
 
-				indices = [12];
+				indices = [15];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				$.plot( $("#outtempplot"),fdata,options);
 				
-				indices = [13,14];
+				indices = [16,17];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				$.plot( $("#watertempplot"),fdata,options);
 				
-				indices = [15,16];
+				indices = [18,19];
 				fdata = []
 				fdata = data.filter(function(obj, index) {
 					return indices.includes(index);
 				});
 				$.plot( $("#waterdtplot"),fdata,options);
+
+				indices = [20];
+				fdata = []
+				fdata = data.filter(function(obj, index) {
+					return indices.includes(index);
+				});
+				$.plot( $("#cputempplot"),fdata,options);
 				
 			});
 		}

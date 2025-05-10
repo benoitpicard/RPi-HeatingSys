@@ -160,8 +160,8 @@ try:
                 TF_Cmd=temp_Target['TF_'+Zone[0]+'_TG (C)']
                 # Default to previous value
                 ValveCmd = new_valveCmd.loc[0,valveName[iZ]]
-                # Update control value based on target and hysteresis
-                if TA_Read < TA_Cmd - hysteresis or TF_Read < TF_Cmd - hysteresis:
+                # Update control value based on target and hysteresis (for the floor to trigger, air temp must also be lower)
+                if TA_Read < TA_Cmd - hysteresis or (TF_Read < TF_Cmd - hysteresis and TA_Read < TF_Cmd - hysteresis):
                     ValveCmd = 1
                 elif TA_Read > TA_Cmd + hysteresis and TF_Read > TF_Cmd + hysteresis:
                     ValveCmd = 0
